@@ -17,7 +17,7 @@ public class DataSet
 		
 	public List<Instance> generateTrainingSet()
 	{
-		List<Instance> result = new ArrayList<Instance>();
+		List<Instance> result = new ArrayList<>();
 		for(Region region : regions)
 			result.addAll(region.generateTrainingInstances());
 		
@@ -28,7 +28,7 @@ public class DataSet
 
 	public List<Instance> generateTestSet()
 	{
-		List<Instance> result = new ArrayList<Instance>();
+		List<Instance> result = new ArrayList<>();
 		for(Region region : regions)
 			result.addAll(region.generateTestInstances());
 		

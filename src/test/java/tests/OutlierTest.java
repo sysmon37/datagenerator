@@ -44,8 +44,8 @@ public class OutlierTest
 			instances.add(new Instance(new Point(Arrays.asList(i)), classIndex));
 		
 		when(additionalPointGeneratorFactory.createOutlier(instances, generatedInstance)).thenReturn(additionaPointGenerator);
-		when(firstPointGenerator.generate()).thenReturn(generatedInstance.point);
-		when(additionaPointGenerator.generate()).thenReturn(secondInstance.point);
+		when(firstPointGenerator.generate()).thenReturn(generatedInstance.getPoint());
+		when(additionaPointGenerator.generate()).thenReturn(secondInstance.getPoint());
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class OutlierTest
 	@Test
 	public void whenRareCaseMiddlePointIsInsideForbiddenZone_returnsAnotherRareCases()
 	{
-		when(firstPointGenerator.generate()).thenReturn(skippedInstance.point, generatedInstance.point);
+		when(firstPointGenerator.generate()).thenReturn(skippedInstance.getPoint(), generatedInstance.getPoint());
 		when(forbiddenZoneChecker.isInsideForbiddenZone(skippedInstance)).thenReturn(true);
 		description = createRareCaseDescription();
 		outlier = new Outlier(Arrays.asList(description),
@@ -92,7 +92,7 @@ public class OutlierTest
 	@Test
 	public void whenRareCasePointIsInsideForbiddenZone_returnsAnotherRareCases()
 	{
-		when(additionaPointGenerator.generate()).thenReturn(skippedInstance.point, secondInstance.point);
+		when(additionaPointGenerator.generate()).thenReturn(skippedInstance.getPoint(), secondInstance.getPoint());
 		when(forbiddenZoneChecker.isInsideForbiddenZone(skippedInstance)).thenReturn(true);
 		description = createRareCaseDescription();
 		outlier = new Outlier(Arrays.asList(description),
@@ -107,7 +107,7 @@ public class OutlierTest
 	@Test
 	public void whenRareCaseMiddleBreaksInterOutleirDistance_returnsAnotherRareCases()
 	{
-		when(firstPointGenerator.generate()).thenReturn(skippedInstance.point, generatedInstance.point);
+		when(firstPointGenerator.generate()).thenReturn(skippedInstance.getPoint(), generatedInstance.getPoint());
 		when(distanceChecker.isInterOutlierDistanceBreached(skippedInstance, new ArrayList<Instance>(), new ArrayList<Instance>())).thenReturn(true);
 		description = createRareCaseDescription();
 		outlier = new Outlier(Arrays.asList(description),
@@ -122,7 +122,7 @@ public class OutlierTest
 	@Test
 	public void whenRareCasePointBreaksInterOutleirDistance_returnsAnotherRareCases()
 	{
-		when(additionaPointGenerator.generate()).thenReturn(skippedInstance.point, secondInstance.point);
+		when(additionaPointGenerator.generate()).thenReturn(skippedInstance.getPoint(), secondInstance.getPoint());
 		when(distanceChecker.isInterOutlierDistanceBreached(skippedInstance, new ArrayList<Instance>(), Arrays.asList(generatedInstance))).thenReturn(true);
 		description = createRareCaseDescription();
 		outlier = new Outlier(Arrays.asList(description),
@@ -137,7 +137,7 @@ public class OutlierTest
 	@Test
 	public void whenRareCaseMiddleHasInvalidNeighbourhood_returnsAnotherRareCases()
 	{
-		when(firstPointGenerator.generate()).thenReturn(skippedInstance.point, generatedInstance.point);
+		when(firstPointGenerator.generate()).thenReturn(skippedInstance.getPoint(), generatedInstance.getPoint());
 		when(neighbourhoodChecker.hasNeighbourFromClassNotBelongingToOutlier(skippedInstance, instances, new ArrayList<Instance>())).thenReturn(true);
 		description = createRareCaseDescription();
 		outlier = new Outlier(Arrays.asList(description),
@@ -152,7 +152,7 @@ public class OutlierTest
 	@Test
 	public void whenRareCasePointHasInvalidNeighbourhood_returnsAnotherRareCases()
 	{
-		when(additionaPointGenerator.generate()).thenReturn(skippedInstance.point, secondInstance.point);
+		when(additionaPointGenerator.generate()).thenReturn(skippedInstance.getPoint(), secondInstance.getPoint());
 		when(neighbourhoodChecker.hasNeighbourFromClassNotBelongingToOutlier(skippedInstance, instances, Arrays.asList(generatedInstance))).thenReturn(true);
 		description = createRareCaseDescription();
 		outlier = new Outlier(Arrays.asList(description),
@@ -167,7 +167,7 @@ public class OutlierTest
 	@Test(expected = IllegalArgumentException.class)
 	public void whenCannotGenerateValidPoint_throws()
 	{
-		when(firstPointGenerator.generate()).thenReturn(skippedInstance.point);
+		when(firstPointGenerator.generate()).thenReturn(skippedInstance.getPoint());
 		when(neighbourhoodChecker.hasNeighbourFromClassNotBelongingToOutlier(skippedInstance, instances, new ArrayList<Instance>())).thenReturn(true);
 		description = createRareCaseDescription();
 		outlier = new Outlier(Arrays.asList(description),
@@ -197,7 +197,7 @@ public class OutlierTest
 	{
 		whenGeneratesRareCases_returnsRareCases();
 		Instance testInstance = new Instance(new Point(Arrays.asList(11.0)), classIndex);
-		when(additionaPointGenerator.generate()).thenReturn(testInstance.point);
+		when(additionaPointGenerator.generate()).thenReturn(testInstance.getPoint());
 		assertEquals(Arrays.asList(testInstance), outlier.generateTest());
 	}
 	
@@ -211,7 +211,7 @@ public class OutlierTest
 							  distanceChecker,
 							  neighbourhoodChecker,
 							  additionalPointGeneratorFactory);
-		when(firstPointGenerator.generate()).thenReturn(generatedInstance.point, skippedInstance.point, secondInstance.point);
+		when(firstPointGenerator.generate()).thenReturn(generatedInstance.getPoint(), skippedInstance.getPoint(), secondInstance.getPoint());
 		when(neighbourhoodChecker.hasNeighbourFromClassNotBelongingToOutlier(skippedInstance, sum(instances, Arrays.asList(generatedInstance)), new ArrayList<Instance>())).thenReturn(true);
 		assertEquals(Arrays.asList(generatedInstance, secondInstance), outlier.generate(instances));
 	}
@@ -226,7 +226,7 @@ public class OutlierTest
 							  distanceChecker,
 							  neighbourhoodChecker,
 							  additionalPointGeneratorFactory);
-		when(firstPointGenerator.generate()).thenReturn(generatedInstance.point, skippedInstance.point, secondInstance.point);
+		when(firstPointGenerator.generate()).thenReturn(generatedInstance.getPoint(), skippedInstance.getPoint(), secondInstance.getPoint());
 		when(distanceChecker.isInterOutlierDistanceBreached(skippedInstance, Arrays.asList(generatedInstance), new ArrayList<Instance>())).thenReturn(true);
 		assertEquals(Arrays.asList(generatedInstance, secondInstance), outlier.generate(instances));
 	}

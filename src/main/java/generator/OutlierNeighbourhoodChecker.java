@@ -20,11 +20,11 @@ public class OutlierNeighbourhoodChecker
 		List<Instance> copy = new ArrayList<Instance>(instances);
 		copy.addAll(currentGroup);
 		List<Instance> nearest = nearestNeighbourSelector.getNeighbours(5,
-									  generated.point,
+									  generated.getPoint(),
 									  copy);
 		int counter = 0;
 		for(Instance neighbour : nearest)
-			if (neighbour.classIndex.equals(generated.classIndex))
+			if (neighbour.getClassIndex().equals(generated.getClassIndex()))
 			{
 				if(!currentGroup.contains(neighbour))
 					return true;

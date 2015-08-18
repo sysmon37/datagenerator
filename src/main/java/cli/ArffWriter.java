@@ -6,50 +6,66 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
-public class ArffWriter
-{	
-	public void writeToFile(String filename,
-							List<Instance> instances,
-							String dataSetDescription) throws IOException
-	{
-		FileWriter writer = new FileWriter(filename);	
-		
-		writer.write(prepareDescription(dataSetDescription)+"\n\n\n");
-		writer.write("@relation New_artificial_problem\n" +
-				 generateAttributes(instances.get(0).point.getNumberOfDimensions()) +
-				 "@attribute Decision " + generateClasses(instances) + "\n" +
-				 "@data\n");
-		
-		for(Instance instance : instances)
-			writer.write(instance.toString() +'\n');
+public class ArffWriter {
 
-		writer.close();
-	}
-	
-	private String generateClasses(List<Instance> instances)
-	{
-		HashSet<String> classes = new HashSet<String>();
-		for(Instance i : instances)
-			classes.add(i.classIndex);
-		
-		String description = classes.toString();
-		return "{" + description.substring(1, description.length() - 1) +"}";
-	}
-	
-	private String generateAttributes(int numberOfAttributes)
-	{
-		StringBuffer result = new StringBuffer();
-		for(int i = 0 ; i < numberOfAttributes ; ++i)
-			result.append("@attribute Attribute_" + i + " numeric\n");
-		return result.toString();
-	}
-	
-	private String prepareDescription(String description)
-	{
-		StringBuilder result = new StringBuilder();
-		for(String s : description.split("\n"))
-			result.append("% " + s + "\n");
-		return result.toString();
-	}
+    
+    public static void writeToFile(ParameterExtractor config, String filename,
+            List<Instance> instances,
+            String dataSetDescription) throws IOException {
+        FileWriter writer = new FileWriter(filename);
+
+        // description
+        writer.write(prepareDescription(dataSetDescription) + "\n\n\n");
+
+        // header
+        writer.write("@relation GENERATED\n");
+        writer.write(prepareAttributes(config));
+        writer.write(prepareClasses(config));
+        writer.write(prepareLabels(config));
+        
+        // body
+        writer.write("@data\n");
+        for (Instance instance : instances) {
+            writer.write(instance.toString(config.isAddLabels(), config.getLabeledClassIndex()) + '\n');
+        }
+
+        writer.close();
+    }
+
+    
+
+    private static String prepareClasses(ParameterExtractor config) {
+        StringBuilder sb = new StringBuilder("@attribute CLASS {");
+        for (int i = 0; i < config.getNumberOfClasses(); i++)
+            sb.append(i > 0 ? ", " : ""). append(i);
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+        
+    private static String prepareAttributes(ParameterExtractor config) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < config.getNumberOfAttributes(); i++)
+            sb.append(String.format("@attribute ATTR_%d numeric\n", i + 1));
+        return sb.toString();
+    }
+
+    private static String prepareDescription(String description) {
+        StringBuilder result = new StringBuilder();
+        for (String s : description.split("\n")) {
+            result.append("% ").append(s).append("\n");
+        }
+        return result.toString();
+    }
+
+    private static String prepareLabels(ParameterExtractor config) {
+        if (config.isAddLabels()) {
+            StringBuilder sb = new StringBuilder("@attribute LABEL {");
+            sb.append(StringUtils.join(Instance.Label.values(), ", ")).append(("}\n"));
+            return sb.toString();
+        } else
+            return StringUtils.EMPTY;
+    }
 }

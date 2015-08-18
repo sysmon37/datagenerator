@@ -29,7 +29,7 @@ public class NeighbourhoodStandardDeviationCalculatorTest
 	public void whenInstancesAreProvided_standardDeviationsAreCalculated()
 	{
 		List<Double> deviations = calculator.calculateStandardDeviations(instances);
-		assertEquals(deviations.size(), instances.get(0).point.getNumberOfDimensions());
+		assertEquals(deviations.size(), instances.get(0).getPoint().getNumberOfDimensions());
 		assertEquals(33.60691893, deviations.get(0), 0.00001);
 		assertEquals(675.166029, deviations.get(1), 0.00001);
 	}

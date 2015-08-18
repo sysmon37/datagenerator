@@ -29,11 +29,15 @@ public class Region
 		this.rotators = rotators;
 	}
 	
-	public Point generateOverlappingPoint()
-	{
-		return rotatePoint(shape.generateOverlappingPoint());
-	}
 	
+        public Point generateOverlappingPoint() {
+            return rotatePoint(shape.generateOverlappingPoint());
+        }
+        
+        public Point generateCorePoint() {
+            return rotatePoint(shape.generateCorePoint());
+        }
+        
 	public List<Instance> generateTrainingInstances()
 	{
 		return generateInstances(numberOfTrainingExamples);
@@ -46,10 +50,12 @@ public class Region
 
 	private List<Instance> generateInstances(int numberOfExamplesToBeGenerated)
 	{
-		List<Point> result = new ArrayList<Point>();
-		result.addAll(generateOverlappingPoints(numberOfExamplesToBeGenerated));
-		result.addAll(generateCorePoints(numberOfExamplesToBeGenerated));
-		return toInstanceList(result);
+                List<Instance> instances = new ArrayList<>();
+                // Generate borderline (overlapping) examples
+                instances.addAll(generateOverlappingInstances(numberOfExamplesToBeGenerated));
+                // Generate safe (core) examples
+                instances.addAll(generateCoreInstances(numberOfExamplesToBeGenerated));
+		return instances;
 	}
 		
 	public boolean isCovered(Point point)
@@ -76,16 +82,38 @@ public class Region
 		return point;
 	}
 	
-	private List<Point> generateCorePoints(int numberOfExamples)
+	private List<Instance> generateCoreInstances(int numberOfExamples)
 	{
 		int numberOfCoreExamples = (int)Math.round(numberOfExamples * (1 - partOfOverlappingExamples));
-		List<Point> result = new ArrayList<Point>();
+		List<Instance> instances = new ArrayList<>();
+		while(instances.size() < numberOfCoreExamples) {
+			Point point = generateCorePoint();
+                        instances.add(new Instance(point, classIndex, Instance.Label.SAFE));
+                }
+		return instances;
+	}
+
+        private List<Point> generateCorePoints(int numberOfExamples)
+	{
+		int numberOfCoreExamples = (int)Math.round(numberOfExamples * (1 - partOfOverlappingExamples));
+		List<Point> result = new ArrayList<>();
 		while(result.size() < numberOfCoreExamples)
-			result.add(rotatePoint(shape.generateCorePoint()));
+			result.add(generateCorePoint());
 		return result;
 	}
 
-	private List<Point> generateOverlappingPoints(int numberOfExamples)
+	private List<Instance> generateOverlappingInstances(int numberOfExamples)
+	{
+		int numberOfOverlappingExamples = (int)Math.round(numberOfExamples * partOfOverlappingExamples);
+		List<Instance> instances = new ArrayList<>();
+		while(instances.size() < numberOfOverlappingExamples) {
+                    Point point = generateOverlappingPoint();
+                    instances.add(new Instance(point, classIndex, Instance.Label.BORDER));
+                }
+		return instances;
+	}
+
+        private List<Point> generateOverlappingPoints(int numberOfExamples)
 	{
 		int numberOfOverlappingExamples = (int)Math.round(numberOfExamples * partOfOverlappingExamples);
 		List<Point> result = new ArrayList<Point>();

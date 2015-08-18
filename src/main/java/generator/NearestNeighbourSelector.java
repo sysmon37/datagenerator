@@ -31,7 +31,7 @@ public class NearestNeighbourSelector
 												   TreeMap<Double, List<Instance>> map,
 												   Instance instance)
 	{
-		double distance = instance.point.distance(target);
+		double distance = instance.getPoint().distance(target);
 		if(K > map.size() || distance < map.lastKey())
 			insert(map, instance, distance);
 		removeSubsetsIfIsToMuch(K, map);

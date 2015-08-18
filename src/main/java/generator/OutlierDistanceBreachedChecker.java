@@ -19,8 +19,8 @@ public class OutlierDistanceBreachedChecker
 			if(currentGroup.contains(instance))
 				continue;
 			
-			double distance = generated.point.distance(instance.point);
-			if((generated.classIndex.equals(instance.classIndex)) &&
+			double distance = generated.getPoint().distance(instance.getPoint());
+			if((generated.getClassIndex().equals(instance.getClassIndex())) &&
 			  (distance < interOutlierDistance))
 			return true;
 		}

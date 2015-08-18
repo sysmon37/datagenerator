@@ -22,7 +22,7 @@ public class NeighbourhoodStandardDeviationCalculator
 		double variance = 0;
 		
 		for(Instance instance : instances)
-			variance += Math.pow(instance.point.getValue(dimension) - mean, 2);
+			variance += Math.pow(instance.getPoint().getValue(dimension) - mean, 2);
 			
 		variance /= instances.size() - 1;
 		return Math.sqrt(variance);
@@ -32,7 +32,7 @@ public class NeighbourhoodStandardDeviationCalculator
 		double mean = 0;
 		for(Instance instance : instances)
 		{
-			mean += instance.point.getValue(dimension);
+			mean += instance.getPoint().getValue(dimension);
 		}
 		mean /= instances.size();
 		return mean;
@@ -45,10 +45,10 @@ public class NeighbourhoodStandardDeviationCalculator
 
 	private int getNumberOfDimensions(List<Instance> instances)
 	{
-		final int dimensionality = instances.get(0).point.getNumberOfDimensions();
+		final int dimensionality = instances.get(0).getPoint().getNumberOfDimensions();
 		for(Instance instance : instances)
 		{
-			if(instance.point.getNumberOfDimensions() != dimensionality)
+			if(instance.getPoint().getNumberOfDimensions() != dimensionality)
 				throw new IllegalArgumentException("Instances are located in different dimensions!");
 		}
 		return dimensionality;

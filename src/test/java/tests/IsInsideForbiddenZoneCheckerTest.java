@@ -35,7 +35,7 @@ public class IsInsideForbiddenZoneCheckerTest
 	@Test
 	public void whenInstanceIsCoveredByClassRegion_returnsTrue()
 	{
-		when(region.isInOutlierForbiddenZone(instance.point)).thenReturn(true);
+		when(region.isInOutlierForbiddenZone(instance.getPoint())).thenReturn(true);
 		regions.put(classIndex, Arrays.asList(region));
 		checker = new IsInsideForbiddenZoneChecker(regions);
 		assertTrue(checker.isInsideForbiddenZone(instance));
@@ -44,7 +44,7 @@ public class IsInsideForbiddenZoneCheckerTest
 	@Test
 	public void whenInstanceIsNotCoveredByClassRegion_returnsFalse()
 	{
-		when(region.isInOutlierForbiddenZone(instance.point)).thenReturn(false);
+		when(region.isInOutlierForbiddenZone(instance.getPoint())).thenReturn(false);
 		regions.put(classIndex, Arrays.asList(region));
 		checker = new IsInsideForbiddenZoneChecker(regions);
 		assertFalse(checker.isInsideForbiddenZone(instance));

@@ -64,8 +64,8 @@ public class RegionTest
 		assertEquals(numberOfTrainingExamples, instances.size(), 0);
 		for(Instance instance : instances)
 		{
-			assertEquals(rotatedCorePoint, instance.point);
-			assertEquals(classIndex, instance.classIndex);
+			assertEquals(rotatedCorePoint, instance.getPoint());
+			assertEquals(classIndex, instance.getClassIndex());
 		}
 	}
 	
@@ -77,8 +77,8 @@ public class RegionTest
 		assertEquals(numberOfTrainingExamples, instances.size(), 0);
 		for(Instance instance : instances)
 		{
-			assertEquals(rotatedOverlappingPoint, instance.point);
-			assertEquals(classIndex, instance.classIndex);
+			assertEquals(rotatedOverlappingPoint, instance.getPoint());
+			assertEquals(classIndex, instance.getClassIndex());
 		}
 	}
 	

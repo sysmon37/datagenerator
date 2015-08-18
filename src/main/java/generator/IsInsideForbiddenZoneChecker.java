@@ -15,9 +15,9 @@ public class IsInsideForbiddenZoneChecker
 	
 	public boolean isInsideForbiddenZone(Instance instance)
 	{		
-		for(Region r : regions.containsKey(instance.classIndex) ? regions.get(instance.classIndex) :
+		for(Region r : regions.containsKey(instance.getClassIndex()) ? regions.get(instance.getClassIndex()) :
 																  new ArrayList<Region>())
-			if(r.isInOutlierForbiddenZone(instance.point))
+			if(r.isInOutlierForbiddenZone(instance.getPoint()))
 				return true;
 		return false;
 	}

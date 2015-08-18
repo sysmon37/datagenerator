@@ -12,7 +12,7 @@ public class AdditionalPointGeneratorFactory
 	public AdditionalOutlierPointGenerator createOutlier(List<Instance> instances,
 																Instance generatedInstance)
 	{
-		return new AdditionalOutlierPointGenerator(generatedInstance.point,
+		return new AdditionalOutlierPointGenerator(generatedInstance.getPoint(),
 				    				  new NearestNeighbourSelector(),
 				    				  new NeighbourhoodStandardDeviationCalculator(),
 				    				  RandomGeneratorFactory.makeOutliersGenerator(),
