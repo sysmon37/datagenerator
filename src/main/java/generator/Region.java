@@ -9,7 +9,7 @@ public class Region
 				  int numberOfTrainingExamples,
 				  int numberOfTestingExamples,
 				  double partOfOverlappingExamples,
-				  String classIndex,
+				  int classIndex,
 				  List<Rotator> rotators)
 	{
 		if(numberOfTrainingExamples < 0)
@@ -140,7 +140,7 @@ public class Region
 	private int numberOfTestingExamples;
 	private int numberOfTrainingExamples;
 	private double partOfOverlappingExamples;
-	private String classIndex;
+	private int classIndex;
 	private List<Rotator> rotators;
 	private Shape shape;
 }

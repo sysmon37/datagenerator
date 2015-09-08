@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class IsInsideForbiddenZoneChecker
 {
-	private Map<String, List<Region>> regions;
-	public IsInsideForbiddenZoneChecker(Map<String, List<Region>> regions)
+	private Map<Integer, List<Region>> regions;
+	public IsInsideForbiddenZoneChecker(Map<Integer, List<Region>> regions)
 	{
 		this.regions = regions;
 	}

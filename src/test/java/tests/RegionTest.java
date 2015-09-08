@@ -26,7 +26,7 @@ public class RegionTest
 	private final static Point overlappingPoint = new Point(Arrays.asList(200.,-300.));
 	private final static Point rotatedOverlappingPoint = new Point(Arrays.asList(-200.,300.));
 	private Shape shape = mock(Shape.class);
-	private String classIndex = "Decision X";
+	private int classIndex = 0;
 	private Rotator rotator = mock(Rotator.class);
 	private List<Rotator> rotators = Arrays.asList(rotator);
 	

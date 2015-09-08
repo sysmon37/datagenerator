@@ -19,8 +19,8 @@ import org.junit.Test;
 
 public class IsInsideForbiddenZoneCheckerTest
 {
-	private static final String classIndex = "decision1";
-	private HashMap<String, List<Region>> regions = new HashMap<String, List<Region>>();
+	private static final int classIndex = 0;
+	private HashMap<Integer, List<Region>> regions = new HashMap<>();
 	private IsInsideForbiddenZoneChecker checker;
 	private Instance instance = new Instance(new Point(Arrays.asList(.4, .7)), classIndex);
 	private Region region = mock(Region.class);

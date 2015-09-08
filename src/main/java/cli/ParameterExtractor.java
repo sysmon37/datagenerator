@@ -1,5 +1,6 @@
 package cli;
 
+import config.GeneratorSettings;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +10,26 @@ import factories.RotationDescription;
 import generator.OutlierType;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.apache.commons.lang.Validate;
 
+/**
+ * This class acts now as a bridge between the new GeneratorSettings and 
+ * the remaining code.
+ */
+@ToString
 public class ParameterExtractor {
 
-    @Getter @Setter private boolean addLabels  = false;
-    @Getter @Setter private String labeledClassIndex = "";
+    @Getter @Setter private boolean _addLabels  = false;
+    @Getter @Setter private int _labeledClassIndex = 0;
     
+    @Getter
+    private GeneratorSettings _settings = null;
+    
+    public ParameterExtractor(GeneratorSettings settings) {
+        Validate.notNull(settings);
+        _settings = settings;
+    }
     
     List<String> values = new ArrayList<String>();
 
@@ -23,15 +38,18 @@ public class ParameterExtractor {
     }
 
     public int getTotalNumberOfExamples() {
-        return Integer.parseInt(values.get(0));
+        // return Integer.parseInt(values.get(0));
+        return _settings.getNumExamples();
     }
 
     public int getNumberOfAttributes() {
-        return Integer.parseInt(values.get(1));
+        // return Integer.parseInt(values.get(1));
+        return _settings.getNumAttributes();
     }
 
     public int getNumberOfClasses() {
-        return Integer.parseInt(values.get(2));
+        // return Integer.parseInt(values.get(2));
+        return _settings.getNumClasses();
     }
 
     public List<RegionDescription> getCommands() {
@@ -67,7 +85,7 @@ public class ParameterExtractor {
         List<Integer> result = new ArrayList<Integer>();
         int[] sumOfClass = getInsideClassDenominators(descriptions);
         for (RegionDescription c : descriptions) {
-            final int classIndex = Integer.parseInt(c.classIndex);
+            final int classIndex = c.classIndex;
             int value = (int) Math.round(c.imbalancedRatio * absoluteDistributionOfRegionExamples[classIndex] / sumOfClass[classIndex]);
             sumOfClass[classIndex] -= c.imbalancedRatio;
             absoluteDistributionOfRegionExamples[classIndex] -= value;
@@ -88,12 +106,19 @@ public class ParameterExtractor {
 
         for (int i = 0; i < classAssignments.size(); ++i) {
             result.add(new RegionDescription(values.subList(descriptionBeginning, descriptionBeginning + getNumberOfParametersPerCommand()),
-                    Integer.toString(classAssignments.get(i))));
+                    classAssignments.get(i)));
             descriptionBeginning += getNumberOfParametersPerCommand();
         }
         return result;
     }
 
+    /**
+     * Returns an array of n elements, where n is equal to the sum of all elements in 
+     * classDistribution. For each class i it contains as many elements equal to i, as
+     * classDistribution[i]. Elements start with class 0, 1, ...
+     * @param classDistribution
+     * @return 
+     */
     private List<Integer> getClassAssignments(int[] classDistribution) {
         List<Integer> result = new ArrayList<Integer>();
         for (int i = 0; i < classDistribution.length; ++i) {
@@ -107,7 +132,7 @@ public class ParameterExtractor {
     private int[] getInsideClassDenominators(List<RegionDescription> commands) {
         int[] result = new int[getNumberOfClasses()];
         for (RegionDescription c : commands) {
-            result[Integer.parseInt(c.classIndex)] += c.imbalancedRatio;
+            result[c.classIndex] += c.imbalancedRatio;
         }
         return result;
     }
@@ -158,6 +183,12 @@ public class ParameterExtractor {
         return loadClassDistribution(getOffsetToNumberOfRegionsPerClass());
     }
 
+    /**
+     * Returns an array with numClasses entries, where i-th element
+     * gives an absolute number of examples from i-th class.
+     * @param offest
+     * @return 
+     */
     private int[] loadClassDistribution(final int offest) {
         int[] result = new int[getNumberOfClasses()];
         for (int i = 0; i < getNumberOfClasses(); ++i) {
@@ -177,7 +208,8 @@ public class ParameterExtractor {
     }
 
     public double getInterOutlierDistance() {
-        return Double.parseDouble(values.get(getOffsetToInterOutlierDistance()));
+        // return Double.parseDouble(values.get(getOffsetToInterOutlierDistance()));
+       return  _settings.getMinOutlierDistance();
     }
 
     public int getOffsetToInterOutlierDistance() {
@@ -216,17 +248,26 @@ public class ParameterExtractor {
         return getOffsetToNumberOfRegionsPerClass() + getNumberOfClasses();
     }
 
+    /**
+     * Creates an array of rare/outlier descriptions. Each entry gives an absolute 
+     * number of cases of specific type (rare, outlier) and belonging to a specific 
+     * class.
+     * 
+     * @return 
+     */
     public List<OutlierDescription> getOutliers() {
+        // TODO: at this point we should have absolute numbers of examples per class (rare and outlier) and per region (safe and border)
         List<OutlierDescription> outlierDescriptions = new ArrayList<OutlierDescription>();
 
         List<Integer> outliersClassAssignments = getClassAssignments(loadClassDistribution(getOffsetToOutliersDescription()));
         for (Integer assignment : outliersClassAssignments) {
-            outlierDescriptions.add(new OutlierDescription(OutlierType.OUTLIER, assignment.toString()));
+            // Outlier description is created for each outlier and for each rare case "island"
+            outlierDescriptions.add(new OutlierDescription(OutlierType.OUTLIER, assignment));
         }
 
         List<Integer> rareCasesClassAssignments = getClassAssignments(loadClassDistribution(getOffsetToOutliersDescription() + getNumberOfClasses()));
         for (Integer assignment : rareCasesClassAssignments) {
-            outlierDescriptions.add(new OutlierDescription(OutlierType.RARE_CASE, assignment.toString()));
+            outlierDescriptions.add(new OutlierDescription(OutlierType.RARE_CASE, assignment));
         }
 
         return outlierDescriptions;
@@ -237,6 +278,11 @@ public class ParameterExtractor {
     }
 
     public int getNumberOfTrainingTestPairsToBeGenerated() {
-        return Integer.parseInt(values.get(4));
+        // return Integer.parseInt(values.get(4));
+        return _settings.getNumLearnTestPairs();
+    }
+    
+    public int getNumLearnTestPairs() {
+        return _settings.getNumLearnTestPairs();
     }
 }

@@ -24,7 +24,7 @@ import generator.Point;
 
 public class OutlierTest
 {
-	private String classIndex = "first class";
+	private int classIndex = 0;
 	private OutlierDescription description = mock(OutlierDescription.class);
 	private AdditionalOutlierPointGenerator additionaPointGenerator = mock(AdditionalOutlierPointGenerator.class);
 	private OutlierFirstPointGenerator firstPointGenerator = mock(OutlierFirstPointGenerator.class);

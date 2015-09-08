@@ -22,7 +22,7 @@ public class NeighbourhoodStandardDeviationCalculatorTest
 		instances = new ArrayList<Instance>(); 
 		
 		for(int i = 1 ; i <= 10 ; ++i)
-			instances.add(new Instance(new Point(Arrays.asList(i * 11.1, i * 223.)), null));
+			instances.add(new Instance(new Point(Arrays.asList(i * 11.1, i * 223.)), 0));
 	}
 
 	@Test
@@ -37,7 +37,7 @@ public class NeighbourhoodStandardDeviationCalculatorTest
 	@Test(expected = IllegalArgumentException.class)
 	public void whenPointsHaveDifferentDimensionalities_throws()
 	{
-		instances.add(new Instance(new Point(Arrays.asList(0., 1., 2.)), null));
+		instances.add(new Instance(new Point(Arrays.asList(0., 1., 2.)), 0));
 		calculator.calculateStandardDeviations(instances);
 	}
 	

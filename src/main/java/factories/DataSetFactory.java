@@ -21,7 +21,7 @@ public class DataSetFactory
 		return new DataSet(makeFlattened(regionsDependencyCreator.getRegions()), outliersBuilder);
 	}
 	
-	private static List<Region> makeFlattened(Map<String, List<Region>> regions)
+	private static List<Region> makeFlattened(Map<Integer, List<Region>> regions)
 	{
 		List<Region> result = new ArrayList<Region>();
 		for(List<Region> lista : regions.values())

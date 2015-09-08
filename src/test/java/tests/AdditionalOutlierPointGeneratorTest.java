@@ -30,7 +30,7 @@ public class AdditionalOutlierPointGeneratorTest
 	public AdditionalOutlierPointGeneratorTest()
 	{
 		for(int i = 0 ; i < 100 ; ++i)
-			instances.add(new Instance(new Point(Arrays.asList((double)i, 100.-i)), "other class"));
+			instances.add(new Instance(new Point(Arrays.asList((double)i, 100.-i)), 1));
 	}
 	
 	@Test

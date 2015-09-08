@@ -20,7 +20,7 @@ public class OutlierDistanceBreachedChecker
 				continue;
 			
 			double distance = generated.getPoint().distance(instance.getPoint());
-			if((generated.getClassIndex().equals(instance.getClassIndex())) &&
+			if((generated.getClassIndex() == instance.getClassIndex()) &&
 			  (distance < interOutlierDistance))
 			return true;
 		}

@@ -19,12 +19,12 @@ import org.junit.Test;
 public class OutlierNeighbourhoodCheckerTest
 {
 	private NearestNeighbourSelector selector = mock(NearestNeighbourSelector.class);
-	private String classIndex = "good";
+	private int classIndex = 0;
 	private List<Instance> instances = new ArrayList<Instance>();
 	private Instance generated = new Instance(new Point(Arrays.asList(-66.)), classIndex);
 	private OutlierNeighbourhoodChecker checker = new OutlierNeighbourhoodChecker(selector);
 	private List<Instance> ownGroup = Arrays.asList(new Instance(new Point(Arrays.asList(100.)), classIndex));
-	private List<Instance> differentClassInstances = Arrays.asList(new Instance(new Point(Arrays.asList(100.)), "different"));
+	private List<Instance> differentClassInstances = Arrays.asList(new Instance(new Point(Arrays.asList(100.)), 1));
 	
 	public OutlierNeighbourhoodCheckerTest()
 	{

@@ -2,12 +2,14 @@ package factories;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-
+@ToString @EqualsAndHashCode
 public class RegionDescription
 {
 	public char shape;
-	public String classIndex;
+	public int classIndex;
 	public int imbalancedRatio;
 	public double partOfOverlappingExamples;
 	public double borderSize;
@@ -19,7 +21,7 @@ public class RegionDescription
 	public Integer numberOfTrainingExamples;
 	public Integer numberOfTestingExamples;
 	
-	public RegionDescription(List<String> subList, String classIndex)
+	public RegionDescription(List<String> subList, int classIndex)
 	{
 		imbalancedRatio = Integer.parseInt(subList.get(0));
 		shape = subList.get(1).charAt(0);
@@ -41,10 +43,4 @@ public class RegionDescription
 		distribution = subList.get(2*numberOfDimensions + 5);
 	}
 
-	public boolean equals(Object object)
-	{
-		if(!(object instanceof RegionDescription))
-			return false;
-		throw new IllegalArgumentException("Needs to implement RegionDescription.equals()!");
-	}
 }

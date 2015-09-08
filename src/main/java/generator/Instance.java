@@ -6,8 +6,8 @@ import lombok.Setter;
 
 public class Instance
 {
-	@Getter private Point point;
-	@Getter private String classIndex;
+	@Getter private Point _point;
+	@Getter private int _classIndex;
         
         public enum Label {
             SAFE,
@@ -17,23 +17,23 @@ public class Instance
             DEFAULT
         };
         
-        @Setter @Getter private Label label = Label.DEFAULT;
+        @Setter @Getter private Label _label = Label.DEFAULT;
         
 
-	public Instance(Point point, String classIndex)
+	public Instance(Point point, int classIndex)
 	{
-		this.point = point;
-		this.classIndex = classIndex;
+		_point = point;
+		_classIndex = classIndex;
 	}
 		
-        public Instance(Point point, String classIndex, Label label) {
+        public Instance(Point point, int classIndex, Label label) {
             this(point, classIndex);
-            this.label = label;
+            _label = label;
         }
         
 	public String toString()
 	{
-		return point.toString() + ", " + classIndex;
+		return getPoint().toString() + ", " + getClassIndex();
 	}
         
         public String toString(boolean addLabel) {
@@ -44,10 +44,10 @@ public class Instance
             return sb.toString();
         }
 	
-        public String toString(boolean addLabel, String labeledClassIndex) {
+        public String toString(boolean addLabel, int labeledClassIndex) {
             StringBuilder sb = new StringBuilder(toString());
             if (addLabel) 
-                sb.append(", ").append(getClassIndex().equals(labeledClassIndex) ? getLabel() : Label.DEFAULT);
+                sb.append(", ").append(getClassIndex() == labeledClassIndex ? getLabel() : Label.DEFAULT);
             return sb.toString();
         }
         
@@ -58,6 +58,6 @@ public class Instance
 			return false;
 		
 		Instance other = (Instance)object;
-		return point.equals(other.point) && classIndex.equals(other.classIndex);	
+		return getPoint().equals(other.getPoint()) && getClassIndex()== other.getClassIndex();	
 	}
 }

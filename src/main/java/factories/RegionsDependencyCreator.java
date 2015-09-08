@@ -9,14 +9,14 @@ import java.util.Map;
 
 class RegionsDependencyCreator
 {
-	private Map<String, List<Region>> regions = new HashMap<String, List<Region>>();
-	private List<Double> mins = new ArrayList<Double>();
-	private List<Double> maxs = new ArrayList<Double>();
+	private final Map<Integer, List<Region>> regions = new HashMap<>();
+	private final List<Double> mins = new ArrayList<>();
+	private final List<Double> maxs = new ArrayList<>();
 
 	public RegionsDependencyCreator(List<RegionDescription> regionDescriptions)
 	{
-		List<RegionDescription> integumentals = new ArrayList<RegionDescription>();
-		List<Region> otherRegions = new ArrayList<Region>();
+		List<RegionDescription> integumentals = new ArrayList<>();
+		List<Region> otherRegions = new ArrayList<>();
 		
 		for(RegionDescription c : regionDescriptions)
 			if(c.shape == 'I')
@@ -29,18 +29,18 @@ class RegionsDependencyCreator
 			}
 		
 		for(RegionDescription c : integumentals)
-			addRegion(c.classIndex, RegionBuilder.buildIntegumental(c, new ArrayList<Region>(otherRegions)));
+			addRegion(c.classIndex, RegionBuilder.buildIntegumental(c, new ArrayList<>(otherRegions)));
 		
 		calculateBorders(regionDescriptions);
 	}
 	
-	private void addRegion(String classIndex, Region region)
+	private void addRegion(int classIndex, Region region)
 	{
-		if(!regions.containsKey(classIndex)) regions.put(classIndex, new ArrayList<Region>());
+		if(!regions.containsKey(classIndex)) regions.put(classIndex, new ArrayList<>());
 		regions.get(classIndex).add(region);
 	}
 	
-	public Map<String, List<Region>> getRegions()
+	public Map<Integer, List<Region>> getRegions()
 	{
 		return regions;
 	}

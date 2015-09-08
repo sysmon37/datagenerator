@@ -66,7 +66,7 @@ public class Outlier {
     }
 
     private Instance generate(List<Instance> currentGroup,
-            String classIndex,
+            int classIndex,
             PointGenerator generator) {
         for (int z = 1; z <= GENERATION_OUTLIER_TRIALS_NUMBER; ++z) {
             Instance generatedInstance = new Instance(generator.generate(), classIndex);
