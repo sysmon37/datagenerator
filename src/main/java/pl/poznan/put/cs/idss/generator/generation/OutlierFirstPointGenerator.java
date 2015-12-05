@@ -41,7 +41,8 @@ public class OutlierFirstPointGenerator implements PointGenerator {
     public Point generate() {
         List<Double> coord = new ArrayList<>();
         for (int i = 0; i < _means.size(); ++i) {
-            coord.add(_generator.getNumber(_means.get(i), _deviations.get(i)));
+            double number = _generator.getNumber(0, 1);
+			coord.add(number * _deviations.get(i) + _means.get(i));
         }
         return new Point(coord);
     }
