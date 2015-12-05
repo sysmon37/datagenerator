@@ -18,7 +18,7 @@ public class UniformDistributionGeneratorTest
 	private static final double spread = (upperBound - lowerBound)/2.0;
 	private static final double pseudoGeneratedNumber = 0.44;
 	private Random generationAlgorithmMock = mock(Random.class);
-	private RandomGenerator generator = new UniformDistributionGenerator(generationAlgorithmMock);
+	private RandomGenerator generator = new UniformDistributionGenerator(generationAlgorithmMock, 1);
 	
 	@Test
 	public void whenCalledGetNumber_returnsProperValue()

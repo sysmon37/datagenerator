@@ -25,7 +25,7 @@ public class RandomGeneratorFactory {
     public static RandomGenerator createCoreExamplesGenerator(Region region) {
         switch (region.getDistribution().getType()) {
             case UNIFORM:
-                return new UniformDistributionGenerator(random);
+                return createOverlappingExamplesGenerator(region.getCenter().getNumDimensions());
             case NORMAL:
                 return new GaussianDistributionGenerator(random,
                         region.getDistribution().getNumStandardDeviations());
@@ -33,8 +33,8 @@ public class RandomGeneratorFactory {
         throw new IllegalArgumentException("Wrong option for distribution!");
     }
 
-    public static RandomGenerator createOverlappingExamplesGenerator() {
-        return new UniformDistributionGenerator(random);
+    public static RandomGenerator createOverlappingExamplesGenerator(int dimensionality) {
+        return new UniformDistributionGenerator(random, dimensionality);
     }
 
     public static RandomGenerator createOutliersGenerator() {

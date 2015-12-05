@@ -14,7 +14,7 @@ public abstract class RandomGenerator
 		this.generationAlgorithm = generationAlgorithm;
 	}
 	
-	public abstract double getNumber(double mean, double range);
+	protected abstract double getNumber(double mean, double range);
 
 	public void shuffle(List<Double> values)
 	{

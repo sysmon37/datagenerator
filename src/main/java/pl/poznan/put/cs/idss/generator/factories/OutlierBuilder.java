@@ -17,7 +17,7 @@ class OutlierBuilder {
         return new OutlierGenerator(outlierDescriptions,
                 new OutlierFirstPointGenerator(regionsDependencyCreator.getMinCoordinate(),
                         regionsDependencyCreator.getMaxCoordinate(),
-                        RandomGeneratorFactory.createOverlappingExamplesGenerator()),
+                        RandomGeneratorFactory.createOverlappingExamplesGenerator(regionsDependencyCreator.getMinCoordinate().getNumDimensions())),
                 new IsInsideForbiddenZoneChecker(regionsDependencyCreator.getRegionGenerators()),
                 new OutlierDistanceBreachedChecker(interOutlierDistance),
                 new OutlierNeighbourhoodChecker(new NearestNeighbourSelector()),

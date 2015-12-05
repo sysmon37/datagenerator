@@ -20,7 +20,7 @@ public class RegionGeneratorBuilder {
 
     public static RegionGenerator createNonIntegumentalRegionGenerator(Region region, int classIndex) {
         RandomGenerator coreGenerator = RandomGeneratorFactory.createCoreExamplesGenerator(region);
-        RandomGenerator overlappingGenerator = RandomGeneratorFactory.createOverlappingExamplesGenerator();
+        RandomGenerator overlappingGenerator = RandomGeneratorFactory.createOverlappingExamplesGenerator(region.getCenter().getNumDimensions());
         DataShape shape = null;
         switch (region.getShape()) {
             case CIRCLE:
@@ -47,7 +47,7 @@ public class RegionGeneratorBuilder {
 
     public static RegionGenerator createIntegumentalRegionGenerator(Region region, int classIndex, List<RegionGenerator> otherGenerators) {
         DataShape shape = new IntegumentalDataShape(region,
-                RandomGeneratorFactory.createOverlappingExamplesGenerator(),
+                RandomGeneratorFactory.createOverlappingExamplesGenerator(region.getCenter().getNumDimensions()),
                 otherGenerators);
         return new RegionGenerator(shape,
                 classIndex,

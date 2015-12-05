@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class RandomGeneratorTest
 {
 	private Random generationAlgorithmMock = mock(Random.class);
-	private RandomGenerator generator = new UniformDistributionGenerator(generationAlgorithmMock);
+	private RandomGenerator generator = new UniformDistributionGenerator(generationAlgorithmMock, 1);
 	
 	@Test
 	public void whenShuffleIsCalled_returnsShuffledList()

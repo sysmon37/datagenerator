@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class UniformDistributionGenerator extends RandomGenerator
 {
-	public UniformDistributionGenerator(Random generationAlgorithm)
+	public UniformDistributionGenerator(Random generationAlgorithm, int dimensionality)
 	{
 		super(generationAlgorithm);
 	}
