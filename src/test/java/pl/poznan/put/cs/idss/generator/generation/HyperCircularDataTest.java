@@ -40,7 +40,7 @@ public class HyperCircularDataTest {
                 new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(0.0)), new Size(Arrays.asList(1.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumber(0, 1)).thenReturn(-0.39);
+        when(coreExamplesGenerator.getNumbers(1)).thenReturn(Arrays.asList(-0.39));
         assertEquals(new Point(Arrays.asList(-0.39)), shape.generateCorePoint());
     }
 
@@ -50,7 +50,7 @@ public class HyperCircularDataTest {
                 new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(1.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumber(0, 1)).thenReturn(-0.39);
+        when(coreExamplesGenerator.getNumbers(1)).thenReturn(Arrays.asList(-0.39));
         assertEquals(new Point(Arrays.asList(-2.39)), shape.generateCorePoint());
     }
 
@@ -60,7 +60,7 @@ public class HyperCircularDataTest {
                 new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumber(0, 1)).thenReturn(-0.39);
+        when(coreExamplesGenerator.getNumbers(1)).thenReturn(Arrays.asList(-0.39));
         assertEquals(new Point(Arrays.asList(-3.95)), shape.generateCorePoint());
     }
 
@@ -70,7 +70,7 @@ public class HyperCircularDataTest {
                 new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumber(0, 1)).thenReturn(-0.4, -0.3);
+        when(coreExamplesGenerator.getNumbers(2)).thenReturn(Arrays.asList(-0.4, -0.3));
         when(overlappingExamplesGenerator.getNumber(0.25, 0.25)).thenReturn(0.4);
         assertEquals(new Point(Arrays.asList(-4., 22.0)), shape.generateCorePoint());
     }
@@ -81,7 +81,8 @@ public class HyperCircularDataTest {
                 new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumber(0, 1)).thenReturn(-1., 0.1, -0.4, -0.3);
+        when(coreExamplesGenerator.getNumbers(2)).thenReturn(Arrays.asList(-1., 0.1),
+        													 Arrays.asList(-0.4, -0.3));
         assertEquals(new Point(Arrays.asList(-4., 22.0)), shape.generateCorePoint());
     }
 
