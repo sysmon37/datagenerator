@@ -129,7 +129,7 @@ public class HyperCircularDataTest {
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
 
-        when(overlappingExamplesGenerator.getNumber(0, 1)).thenReturn(0.75);
+        when(overlappingExamplesGenerator.getNumbers(1)).thenReturn(Arrays.asList(0.75));
         assertEquals(new Point(Arrays.asList(4.)), shape.generateOverlappingPoint());
     }
 
@@ -140,7 +140,8 @@ public class HyperCircularDataTest {
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
 
-        when(overlappingExamplesGenerator.getNumber(0., 1.)).thenReturn(0.625, -0.875);
+        when(overlappingExamplesGenerator.getNumbers(1)).thenReturn(Arrays.asList(0.625),
+        															Arrays.asList(-0.875));
         assertEquals(new Point(Arrays.asList(-9.)), shape.generateOverlappingPoint());
     }
 
@@ -151,7 +152,7 @@ public class HyperCircularDataTest {
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
 
-        when(overlappingExamplesGenerator.getNumber(0, 1)).thenReturn(0.75, -8./13);
+        when(overlappingExamplesGenerator.getNumbers(2)).thenReturn(Arrays.asList(0.75, -8./13));
         assertEquals(new Point(Arrays.asList(4., 17.)), shape.generateOverlappingPoint());
     }
 
@@ -162,7 +163,8 @@ public class HyperCircularDataTest {
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
 
-        when(overlappingExamplesGenerator.getNumber(0, 1.)).thenReturn(0.75, -10./13., 0.75, -8./13.);
+        when(overlappingExamplesGenerator.getNumbers(2)).thenReturn(Arrays.asList(0.75, -10./13.),
+        															Arrays.asList(0.75, -8./13.));
         assertEquals(new Point(Arrays.asList(4., 17.)), shape.generateOverlappingPoint());
     }
 

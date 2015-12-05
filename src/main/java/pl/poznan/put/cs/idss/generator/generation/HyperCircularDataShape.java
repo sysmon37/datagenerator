@@ -36,10 +36,9 @@ public class HyperCircularDataShape extends DataShape {
     public Point generateOverlappingPoint() {
         Point point = null;
         do {
-            List<Double> coord = new ArrayList<>(_region.getCenter().getNumDimensions());
+            List<Double> coord = _overlappingGenerator.getNumbers(_region.getCenter().getNumDimensions());
             for (int i = 0; i < _region.getCenter().getNumDimensions(); ++i) {
-                double number = _overlappingGenerator.getNumber(0, 1);
-				coord.add(number * (_region.getRadius().get(i) + _region.getBorderZone()) + _region.getCenter().get(i));
+				coord.set(i, coord.get(i) * (_region.getRadius().get(i) + _region.getBorderZone()) + _region.getCenter().get(i));
             }
             point = new Point(coord);
         } while (isCovered(point, 0) || !isCovered(point, _region.getBorderZone()));
