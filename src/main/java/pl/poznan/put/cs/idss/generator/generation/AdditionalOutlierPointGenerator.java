@@ -30,7 +30,8 @@ public class AdditionalOutlierPointGenerator implements PointGenerator {
     public Point generate() {
         List<Double> newCoordinates = new ArrayList<Double>();
         for (int i = 0; i < middlePoint.getNumberOfDimensions(); ++i) {
-            newCoordinates.add(generator.getNumber(middlePoint.getValue(i), deviations.get(i)));
+            double number = generator.getNumber(0, 1);
+			newCoordinates.add(number * deviations.get(i) + middlePoint.getValue(i));
         }
         return new Point(newCoordinates);
     }
