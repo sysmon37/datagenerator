@@ -24,8 +24,8 @@ public class HyperRectangularDataShape extends DataShape {
         do {
             List<Double> coord = new ArrayList<>();
             for (int i = 0; i < _region.getCenter().getNumDimensions(); i++) {
-                coord.add(_overlappingGenerator.getNumber(_region.getCenter().get(i),
-                    _region.getRadius().get(i) + _region.getBorderZone()));
+                double number = _overlappingGenerator.getNumber(0, 1);
+				coord.add(number * (_region.getRadius().get(i) + _region.getBorderZone()) + _region.getCenter().get(i));
             }
             point = new Point(coord);
         } while (isCovered(point, 0));
