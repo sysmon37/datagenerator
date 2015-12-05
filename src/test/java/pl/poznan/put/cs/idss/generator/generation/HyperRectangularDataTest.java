@@ -32,9 +32,9 @@ public class HyperRectangularDataTest {
 
     @Test
     public void whenGenerateCorePointIsCalled_returnsCorePoint() {
-        when(generator.getNumber(0, 1)).
-                thenReturn((corePointCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
-                           (corePointCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1));
+        when(generator.getNumbers(2)).
+                thenReturn(Arrays.asList((corePointCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
+                           (corePointCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1)));
 
         DataShape shape = new HyperRectangularDataShape(
                 new Region(1, ShapeType.RECTANGLE, new Coordinate(middleCoordinates), new Size(axisLengths), borderSize, outlierForbiddenZone, new Distribution(DistributionType.UNIFORM), null),

@@ -33,9 +33,9 @@ public class IntegumentalDataTest {
 
     @Test
     public void whenGenerateCorePointIsCalled_returnsCorePoint() {
-        when(generator.getNumber(0, 1)).
-                thenReturn((generatedCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
-        				   (generatedCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1));
+        when(generator.getNumbers(2)).
+                thenReturn(Arrays.asList((generatedCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
+        				   (generatedCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1)));
 
         assertEquals(new Point(generatedCoordinates), shape.generateCorePoint());
     }
@@ -44,11 +44,11 @@ public class IntegumentalDataTest {
     public void whenGeneratedCorePointIsInsideOtherShape_returnsAnotherCorePoint() {
         List<Double> skippedCoordinates = Arrays.asList(-51.4, 27.1);
 
-        when(generator.getNumber(0, 1)).
-                thenReturn((skippedCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
-                		   (skippedCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1), 
-                		   (generatedCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
-                           (generatedCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1));
+        when(generator.getNumbers(2)).
+                thenReturn(Arrays.asList((skippedCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
+                		   (skippedCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1)), 
+                		   Arrays.asList((generatedCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
+                           (generatedCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1)));
         when(figures.get(0).isInCoreZone(new Point(skippedCoordinates))).
                 thenReturn(true);
 

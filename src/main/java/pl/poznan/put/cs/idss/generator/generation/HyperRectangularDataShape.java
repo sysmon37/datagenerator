@@ -50,10 +50,9 @@ public class HyperRectangularDataShape extends DataShape {
 
     @Override
     public Point generateCorePoint() {
-        List<Double> coord = new ArrayList<>();
+        List<Double> coord = _coreGenerator.getNumbers(_region.getCenter().getNumDimensions());
         for (int i = 0; i < _region.getCenter().getNumDimensions(); i++) {
-            double number = _coreGenerator.getNumber(0, 1);
-			coord.add(number * _region.getRadius().get(i) + _region.getCenter().get(i));
+			coord.set(i, coord.get(i) * _region.getRadius().get(i) + _region.getCenter().get(i));
         }
         return new Point(coord);
     }
