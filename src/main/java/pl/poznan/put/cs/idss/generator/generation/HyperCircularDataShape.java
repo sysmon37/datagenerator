@@ -23,7 +23,8 @@ public class HyperCircularDataShape extends DataShape {
         do {
             List<Double> coord = new ArrayList<>(_region.getCenter().getNumDimensions());
             for (int i = 0; i < _region.getCenter().getNumDimensions(); ++i) {
-                coord.add(_coreGenerator.getNumber(_region.getCenter().get(i), _region.getRadius().get(i)));
+                double number = _coreGenerator.getNumber(0, 1);
+				coord.add(number * _region.getRadius().get(i) + _region.getCenter().get(i));
             }
 
             point = new Point(coord);
