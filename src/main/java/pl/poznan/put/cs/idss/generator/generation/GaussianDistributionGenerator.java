@@ -17,7 +17,7 @@ public class GaussianDistributionGenerator extends RandomGenerator
             standardDeviationCoefficient = numStandardDeviations;
 	}
 
-	public double getNumber(double mean, double range)
+	protected double getNumber(double mean, double range)
 	{
 		double value = generationAlgorithm.nextGaussian();
 		return value * range/standardDeviationCoefficient + mean;

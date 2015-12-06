@@ -10,7 +10,7 @@ public class UniformDistributionGenerator extends RandomGenerator
 		super(generationAlgorithm, dimensionality);
 	}
 
-	public double getNumber(double mean, double range)
+	protected double getNumber(double mean, double range)
 	{
 		double lowerBound = mean - range;
 		double upperBound = mean + range;

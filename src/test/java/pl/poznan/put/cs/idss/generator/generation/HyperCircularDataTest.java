@@ -71,7 +71,6 @@ public class HyperCircularDataTest {
                 coreExamplesGenerator,
                 overlappingExamplesGenerator);
         when(coreExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.4, -0.3));
-        when(overlappingExamplesGenerator.getNumber(0.25, 0.25)).thenReturn(0.4);
         assertEquals(new Point(Arrays.asList(-4., 22.0)), shape.generateCorePoint());
     }
 
