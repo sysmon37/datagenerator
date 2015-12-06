@@ -14,7 +14,7 @@ public class AdditionalPointGeneratorFactory {
         return new AdditionalOutlierPointGenerator(generatedExample.getPoint(),
                 new NearestNeighbourSelector(),
                 new NeighbourhoodStandardDeviationCalculator(),
-                RandomGeneratorFactory.createOutliersGenerator(),
+                RandomGeneratorFactory.createOutliersGenerator(generatedExample.getPoint().getNumberOfDimensions()),
                 examples);
     }
 }

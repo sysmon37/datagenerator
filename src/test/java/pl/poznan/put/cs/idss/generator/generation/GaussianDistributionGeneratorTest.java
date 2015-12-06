@@ -19,7 +19,7 @@ public class GaussianDistributionGeneratorTest
 	private static final double numberOfStdContainedInSpread = 4;
 	private static final double pseudoGeneratedNumber = 0.44;
 	private Random generationAlgorithmMock = mock(Random.class);
-	private RandomGenerator generator = new GaussianDistributionGenerator(generationAlgorithmMock, numberOfStdContainedInSpread);
+	private RandomGenerator generator = new GaussianDistributionGenerator(generationAlgorithmMock, 1, numberOfStdContainedInSpread);
 	
 	@Test
 	public void whenCalledGetNumber_returnsProperValue()

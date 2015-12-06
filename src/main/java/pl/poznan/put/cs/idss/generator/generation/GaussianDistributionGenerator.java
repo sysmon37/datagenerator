@@ -8,7 +8,9 @@ public class GaussianDistributionGenerator extends RandomGenerator
 {
 	private double standardDeviationCoefficient;
 
-	public GaussianDistributionGenerator(Random generationAlgorithm, double numStandardDeviations)
+	public GaussianDistributionGenerator(Random generationAlgorithm,
+										 int dimensionality,
+										 double numStandardDeviations)
 	{
             super(generationAlgorithm);
             Validate.validState(numStandardDeviations > 0);

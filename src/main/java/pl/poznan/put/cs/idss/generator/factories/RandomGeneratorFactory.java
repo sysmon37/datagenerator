@@ -28,6 +28,7 @@ public class RandomGeneratorFactory {
                 return createOverlappingExamplesGenerator(region.getCenter().getNumDimensions());
             case NORMAL:
                 return new GaussianDistributionGenerator(random,
+                										 region.getCenter().getNumDimensions(),
                         region.getDistribution().getNumStandardDeviations());
         }
         throw new IllegalArgumentException("Wrong option for distribution!");
@@ -37,7 +38,7 @@ public class RandomGeneratorFactory {
         return new UniformDistributionGenerator(random, dimensionality);
     }
 
-    public static RandomGenerator createOutliersGenerator() {
-        return new GaussianDistributionGenerator(random, 3.0);
+    public static RandomGenerator createOutliersGenerator(int dimensionality) {
+        return new GaussianDistributionGenerator(random, dimensionality, 3.0);
     }
 }
