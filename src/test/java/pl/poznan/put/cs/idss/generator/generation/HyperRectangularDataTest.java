@@ -32,7 +32,7 @@ public class HyperRectangularDataTest {
 
     @Test
     public void whenGenerateCorePointIsCalled_returnsCorePoint() {
-        when(generator.getNumbers(2)).
+        when(generator.getNumbers()).
                 thenReturn(Arrays.asList((corePointCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
                            (corePointCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1)));
 
@@ -46,7 +46,7 @@ public class HyperRectangularDataTest {
 
     @Test
     public void whenGenerateOverlappingPointIsCalled_returnsOverlappingPoint() {
-        when(generator.getNumbers(2)).
+        when(generator.getNumbers()).
                 thenReturn(Arrays.asList((overlappingPointCoordinates.get(0) - middleCoordinates.get(0))/(axisLengths.get(0) + borderSize),
                            (overlappingPointCoordinates.get(1) - middleCoordinates.get(1))/(axisLengths.get(1) + borderSize)));
 
@@ -60,7 +60,7 @@ public class HyperRectangularDataTest {
 
     @Test
     public void whenGeneratedOverlappingPointIsInsideCore_returnsAnotherOneOverlappingPoint() {
-        when(generator.getNumbers(2)).
+        when(generator.getNumbers()).
                 thenReturn(Arrays.asList((corePointCoordinates.get(0) - middleCoordinates.get(0))/(axisLengths.get(0) + borderSize),
                            (corePointCoordinates.get(1) - middleCoordinates.get(1))/(axisLengths.get(1) + borderSize)),
                            Arrays.asList((overlappingPointCoordinates.get(0) - middleCoordinates.get(0))/(axisLengths.get(0) + borderSize),

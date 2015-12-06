@@ -23,7 +23,7 @@ public class OutlierFirstPointGeneratorTest {
 
     @Test
     public void whenGenerateIsCalled_returnsPoint() {
-        when(numberGenerator.getNumbers(2)).thenReturn(Arrays.asList(7.85/4.20, -52.6/41.0));
+        when(numberGenerator.getNumbers()).thenReturn(Arrays.asList(7.85/4.20, -52.6/41.0));
         assertEquals(new Point(Arrays.asList(4.05, -3.4)), pointGenerator.generate());
     }
 

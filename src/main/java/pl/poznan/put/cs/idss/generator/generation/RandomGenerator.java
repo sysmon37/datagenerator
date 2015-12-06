@@ -8,10 +8,12 @@ import java.util.Random;
 public abstract class RandomGenerator
 {
 	protected Random generationAlgorithm;
+	protected int dimensionality;
 
-	public RandomGenerator(Random generationAlgorithm)
+	public RandomGenerator(Random generationAlgorithm, int dimensionality)
 	{
 		this.generationAlgorithm = generationAlgorithm;
+		this.dimensionality = dimensionality;
 	}
 	
 	protected abstract double getNumber(double mean, double range);
@@ -21,7 +23,7 @@ public abstract class RandomGenerator
 		Collections.shuffle(values, generationAlgorithm);
 	}
 	
-    public List<Double> getNumbers(int dimensionality)
+    public List<Double> getNumbers()
     {
         List<Double> coordinates = new ArrayList<Double>();
         for (int i = 0; i < dimensionality; ++i)

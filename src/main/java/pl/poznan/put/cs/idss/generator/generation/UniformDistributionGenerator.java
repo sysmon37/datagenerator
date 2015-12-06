@@ -7,7 +7,7 @@ public class UniformDistributionGenerator extends RandomGenerator
 {
 	public UniformDistributionGenerator(Random generationAlgorithm, int dimensionality)
 	{
-		super(generationAlgorithm);
+		super(generationAlgorithm, dimensionality);
 	}
 
 	public double getNumber(double mean, double range)

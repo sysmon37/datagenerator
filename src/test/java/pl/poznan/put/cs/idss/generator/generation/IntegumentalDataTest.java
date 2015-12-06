@@ -33,7 +33,7 @@ public class IntegumentalDataTest {
 
     @Test
     public void whenGenerateCorePointIsCalled_returnsCorePoint() {
-        when(generator.getNumbers(2)).
+        when(generator.getNumbers()).
                 thenReturn(Arrays.asList((generatedCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
         				   (generatedCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1)));
 
@@ -44,7 +44,7 @@ public class IntegumentalDataTest {
     public void whenGeneratedCorePointIsInsideOtherShape_returnsAnotherCorePoint() {
         List<Double> skippedCoordinates = Arrays.asList(-51.4, 27.1);
 
-        when(generator.getNumbers(2)).
+        when(generator.getNumbers()).
                 thenReturn(Arrays.asList((skippedCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),
                 		   (skippedCoordinates.get(1) - middleCoordinates.get(1))/axisLengths.get(1)), 
                 		   Arrays.asList((generatedCoordinates.get(0) - middleCoordinates.get(0))/axisLengths.get(0),

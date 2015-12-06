@@ -39,7 +39,7 @@ public class OutlierFirstPointGenerator implements PointGenerator {
 
     @Override
     public Point generate() {
-        List<Double> coord = _generator.getNumbers(_means.size());
+        List<Double> coord = _generator.getNumbers();
         for (int i = 0; i < _means.size(); ++i) {
 			coord.set(i, coord.get(i) * _deviations.get(i) + _means.get(i));
         }

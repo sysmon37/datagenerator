@@ -32,7 +32,7 @@ public class AdditionalOutlierPointGeneratorTest
 	{
 		when(selector.getNeighbours(10, middlePoint, examples)).thenReturn(examples.subList(91, 100));
 		when(calculator.calculateStandardDeviations(examples.subList(91, 100))).thenReturn(deviations);
-		when(numberGenerator.getNumbers(2)).thenReturn(Arrays.asList((generatedPoint.getValue(0) - middlePoint.getValue(0))/deviations.get(0),
+		when(numberGenerator.getNumbers()).thenReturn(Arrays.asList((generatedPoint.getValue(0) - middlePoint.getValue(0))/deviations.get(0),
 														 (generatedPoint.getValue(1) - middlePoint.getValue(1))/deviations.get(1)));
 		pointGenerator = new AdditionalOutlierPointGenerator(middlePoint, selector, calculator, numberGenerator, examples);
 		assertEquals(generatedPoint, pointGenerator.generate());

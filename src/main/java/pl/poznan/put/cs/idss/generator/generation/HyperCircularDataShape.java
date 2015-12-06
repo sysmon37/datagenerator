@@ -21,7 +21,7 @@ public class HyperCircularDataShape extends DataShape {
     public Point generateCorePoint() {
         Point point = null;
         do {
-            List<Double> coord = _coreGenerator.getNumbers(_region.getCenter().getNumDimensions());
+            List<Double> coord = _coreGenerator.getNumbers();
             for (int i = 0; i < _region.getCenter().getNumDimensions(); ++i) {
 				coord.set(i, coord.get(i) * _region.getRadius().get(i) + _region.getCenter().get(i));
             }
@@ -35,7 +35,7 @@ public class HyperCircularDataShape extends DataShape {
     public Point generateOverlappingPoint() {
         Point point = null;
         do {
-            List<Double> coord = _overlappingGenerator.getNumbers(_region.getCenter().getNumDimensions());
+            List<Double> coord = _overlappingGenerator.getNumbers();
             for (int i = 0; i < _region.getCenter().getNumDimensions(); ++i) {
 				coord.set(i, coord.get(i) * (_region.getRadius().get(i) + _region.getBorderZone()) + _region.getCenter().get(i));
             }

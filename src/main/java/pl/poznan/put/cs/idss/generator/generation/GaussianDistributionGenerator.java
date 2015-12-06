@@ -12,7 +12,7 @@ public class GaussianDistributionGenerator extends RandomGenerator
 										 int dimensionality,
 										 double numStandardDeviations)
 	{
-            super(generationAlgorithm);
+            super(generationAlgorithm, dimensionality);
             Validate.validState(numStandardDeviations > 0);
             standardDeviationCoefficient = numStandardDeviations;
 	}
