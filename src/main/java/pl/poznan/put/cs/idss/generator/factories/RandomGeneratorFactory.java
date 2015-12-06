@@ -3,6 +3,7 @@ package pl.poznan.put.cs.idss.generator.factories;
 import pl.poznan.put.cs.idss.generator.settings.Region;
 import pl.poznan.put.cs.idss.generator.generation.GaussianDistributionGenerator;
 import pl.poznan.put.cs.idss.generator.generation.HighQualityRandom;
+import pl.poznan.put.cs.idss.generator.generation.LowDiscrepancySequenceGenerator;
 import pl.poznan.put.cs.idss.generator.generation.RandomGenerator;
 import pl.poznan.put.cs.idss.generator.generation.UniformDistributionGenerator;
 
@@ -10,10 +11,13 @@ import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import org.apache.commons.math3.random.HaltonSequenceGenerator;
+
 public class RandomGeneratorFactory {
 
     public final static long RANDOM_SEED = generateRandomSeed();
     private static final Random random = new HighQualityRandom(RANDOM_SEED);//new SecureRandom();//new Random(RANDOM_SEED);
+    private static RandomGenerator lowDiscrepancySequenceGenerator = null;
 
     private static long generateRandomSeed() {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
@@ -35,7 +39,12 @@ public class RandomGeneratorFactory {
     }
 
     public static RandomGenerator createOverlappingExamplesGenerator(int dimensionality) {
+        /*
         return new UniformDistributionGenerator(random, dimensionality);
+    	*/
+    	if(lowDiscrepancySequenceGenerator == null)
+    		lowDiscrepancySequenceGenerator = new LowDiscrepancySequenceGenerator(random, dimensionality, new HaltonSequenceGenerator(dimensionality));
+		return lowDiscrepancySequenceGenerator;
     }
 
     public static RandomGenerator createOutliersGenerator(int dimensionality) {
