@@ -1,8 +1,5 @@
 package pl.poznan.put.cs.idss.generator.settings;
 
-import pl.poznan.put.cs.idss.generator.settings.GeneratorSettings;
-import pl.poznan.put.cs.idss.generator.settings.Class;
-import pl.poznan.put.cs.idss.generator.settings.Ratio;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;

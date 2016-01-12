@@ -4,8 +4,8 @@ import pl.poznan.put.cs.idss.generator.settings.ParameterExtractor;
 import java.util.List;
 
 import pl.poznan.put.cs.idss.generator.factories.OutlierDescription;
-import pl.poznan.put.cs.idss.generator.factories.RandomGeneratorFactory;
 import pl.poznan.put.cs.idss.generator.factories.RotationDescription;
+import pl.poznan.put.cs.idss.generator.generation.RandomGenerator;
 
 public class DataSetDescriptionCreator {
 
@@ -31,7 +31,7 @@ public class DataSetDescriptionCreator {
     }
 
     private String getRandomGeneratorSeed() {
-        return "Random Generator's seed: " + RandomGeneratorFactory.RANDOM_SEED + "\n";
+        return "Random Generator's seed: " + RandomGenerator.RANDOM_SEED + "\n";
     }
 
     private String getOutlierDescriptions() {

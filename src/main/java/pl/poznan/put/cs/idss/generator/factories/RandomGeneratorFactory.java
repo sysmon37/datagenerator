@@ -2,52 +2,44 @@ package pl.poznan.put.cs.idss.generator.factories;
 
 import pl.poznan.put.cs.idss.generator.settings.Region;
 import pl.poznan.put.cs.idss.generator.generation.GaussianDistributionGenerator;
-import pl.poznan.put.cs.idss.generator.generation.HighQualityRandom;
 import pl.poznan.put.cs.idss.generator.generation.LowDiscrepancySequenceGenerator;
 import pl.poznan.put.cs.idss.generator.generation.RandomGenerator;
-import pl.poznan.put.cs.idss.generator.generation.UniformDistributionGenerator;
 
-import java.nio.ByteBuffer;
-import java.security.SecureRandom;
-import java.util.Random;
 
-import org.apache.commons.math3.random.HaltonSequenceGenerator;
 
 public class RandomGeneratorFactory {
 
-    public final static long RANDOM_SEED = generateRandomSeed();
-    private static final Random random = new HighQualityRandom(RANDOM_SEED);//new SecureRandom();//new Random(RANDOM_SEED);
-    private static RandomGenerator lowDiscrepancySequenceGenerator = null;
-
-    private static long generateRandomSeed() {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.put(SecureRandom.getSeed(Long.BYTES));
-        buffer.flip();
-        return buffer.getLong();
-    }
-
+    
     public static RandomGenerator createCoreExamplesGenerator(Region region) {
+        int numDimensions = region.getCenter().getNumDimensions();
         switch (region.getDistribution().getType()) {
             case UNIFORM:
-                return createOverlappingExamplesGenerator(region.getCenter().getNumDimensions());
+                return createUniformGenerator(region);
             case NORMAL:
-                return new GaussianDistributionGenerator(random,
-                										 region.getCenter().getNumDimensions(),
-                        region.getDistribution().getNumStandardDeviations());
+                return createNormalGenerator(region);
         }
         throw new IllegalArgumentException("Wrong option for distribution!");
     }
 
-    public static RandomGenerator createOverlappingExamplesGenerator(int dimensionality) {
-        /*
-        return new UniformDistributionGenerator(random, dimensionality);
-    	*/
-    	if(lowDiscrepancySequenceGenerator == null)
-    		lowDiscrepancySequenceGenerator = new LowDiscrepancySequenceGenerator(random, dimensionality, new HaltonSequenceGenerator(dimensionality));
-		return lowDiscrepancySequenceGenerator;
+    public static RandomGenerator createOverlappingExamplesGenerator(int numDimensions) {
+        return new LowDiscrepancySequenceGenerator(numDimensions);
     }
 
-    public static RandomGenerator createOutliersGenerator(int dimensionality) {
-        return new GaussianDistributionGenerator(random, dimensionality, 3.0);
+    public static RandomGenerator createOutliersGenerator(int numDimensions) {
+        return new GaussianDistributionGenerator(numDimensions, 3.0);
     }
+    
+    protected static RandomGenerator createUniformGenerator(Region region) {
+        int numDimensions = region.getCenter().getNumDimensions();
+        return createUniformGenerator(numDimensions);
+    }
+    
+    protected static RandomGenerator createUniformGenerator(int numDimensions) {
+        return new LowDiscrepancySequenceGenerator(numDimensions);        
+    }
+
+    protected static RandomGenerator createNormalGenerator(Region region) {
+        return new GaussianDistributionGenerator(region.getCenter().getNumDimensions(), region.getDistribution().getNumStandardDeviations());
+    }
+    
 }
