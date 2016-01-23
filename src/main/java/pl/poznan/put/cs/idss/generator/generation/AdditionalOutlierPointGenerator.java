@@ -23,7 +23,7 @@ public class AdditionalOutlierPointGenerator implements PointGenerator {
     private List<Double> getStandardDeviations(List<Example> examples,
             NearestNeighbourSelector selector,
             NeighbourhoodStandardDeviationCalculator deviationCalculator) {
-        List<Example> nearest = selector.getNeighbours(K_STANDARD_DEVIATION, middle.getPoint(), examples);
+        List<Example> nearest = selector.getNeighbours(K_STANDARD_DEVIATION, middle, examples);
         return deviationCalculator.calculateStandardDeviations(nearest);
     }
 

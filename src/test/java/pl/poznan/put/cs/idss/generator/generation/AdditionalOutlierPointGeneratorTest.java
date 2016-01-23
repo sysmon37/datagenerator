@@ -30,7 +30,7 @@ public class AdditionalOutlierPointGeneratorTest
 	@Test
 	public void whenGenerateIsCalled_returnsPointBasedOnLocalNeighbourhoodOfTheMiddlePoint()
 	{
-		when(selector.getNeighbours(10, middle.getPoint(), examples)).thenReturn(examples.subList(91, 100));
+		when(selector.getNeighbours(10, middle, examples)).thenReturn(examples.subList(91, 100));
 		when(calculator.calculateStandardDeviations(examples.subList(91, 100))).thenReturn(deviations);
 		when(numberGenerator.getNumbers()).thenReturn(Arrays.asList((generatedPoint.getValue(0) - middle.getPoint().getValue(0))/deviations.get(0),
 														 (generatedPoint.getValue(1) - middle.getPoint().getValue(1))/deviations.get(1)));

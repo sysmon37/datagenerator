@@ -27,7 +27,7 @@ public class NearestNeighbourSelectorTest {
     @Test
     public void whenEmptyListOfNeighboursIsProvided_returnsEmptyList() {
         List<Example> nearest = selector.getNeighbours(K,
-                new Point(Arrays.asList(0., 0.)),
+                new Example(new Point(Arrays.asList(0., 0.)), 59),
                 new ArrayList<Example>());
         assertEquals(0, nearest.size());
     }
@@ -35,7 +35,7 @@ public class NearestNeighbourSelectorTest {
     @Test
     public void whenNeighboursAreProvided_returnsKNeighbours() {
         List<Example> nearest = selector.getNeighbours(K,
-                new Point(Arrays.asList(0., 0.)),
+        		new Example(new Point(Arrays.asList(0., 0.)), 59),
                 examples);
         assertElementsAreIdentical(examples.subList(0, K), nearest);
     }
@@ -43,7 +43,7 @@ public class NearestNeighbourSelectorTest {
     @Test
     public void whenNeighboursAreProvided_returnsKNearestNeighbours() {
         List<Example> nearest = selector.getNeighbours(K,
-                new Point(Arrays.asList(11., 44.)),
+        		new Example(new Point(Arrays.asList(11., 44.)), 59),
                 examples);
         assertElementsAreIdentical(examples.subList(examples.size() - K, examples.size()), nearest);
     }
@@ -51,7 +51,7 @@ public class NearestNeighbourSelectorTest {
     @Test
     public void whenDistancesAreEqual_returnsMoreThanKNearestNeighbours() {
         List<Example> nearest = selector.getNeighbours(K,
-                new Point(Arrays.asList(0., 19.125)),
+        		new Example(new Point(Arrays.asList(0., 19.125)), 59),
                 examples);
         assertElementsAreIdentical(examples.subList(1, 7), nearest);
     }

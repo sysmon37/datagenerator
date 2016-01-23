@@ -31,28 +31,28 @@ public class OutlierNeighbourhoodCheckerTest
 	@Test
 	public void whenCheckFirstTimeAndNoObjectFromSameClassIsInNeighbourhood_returnsfalse()
 	{
-		when(selector.getNeighbours(5, generated.getPoint(), examples)).thenReturn(differentClassExamples);
+		when(selector.getNeighbours(5, generated, examples)).thenReturn(differentClassExamples);
 		assertFalse(checker.hasNeighbourFromClassNotBelongingToOutlier(generated, examples, new ArrayList<Example>()));
 	}
 	
 	@Test
 	public void whenCheckFirstTimeAndObjectFromSameClassIsInNeighbourhood_returnsTrue()
 	{
-		when(selector.getNeighbours(5, generated.getPoint(), examples)).thenReturn(examples.subList(96, 100));	
+		when(selector.getNeighbours(5, generated, examples)).thenReturn(examples.subList(96, 100));	
 		assertTrue(checker.hasNeighbourFromClassNotBelongingToOutlier(generated, examples, new ArrayList<Example>()));
 	}
 	
 	@Test
 	public void whenCheckSecondTimeAndObjectFromSameGroupIsInNeighbourhood_returnsFalse()
 	{
-		when(selector.getNeighbours(5, generated.getPoint(), sum(examples, ownGroup))).thenReturn(ownGroup);	
+		when(selector.getNeighbours(5, generated, sum(examples, ownGroup))).thenReturn(ownGroup);	
 		assertFalse(checker.hasNeighbourFromClassNotBelongingToOutlier(generated, examples, ownGroup));
 	}
 	
 	@Test
 	public void whenCheckSecondTimeAndNoObjectFromSameGroupIsInNeighbourhood_returnsTrue()
 	{
-		when(selector.getNeighbours(5, generated.getPoint(), sum(examples, ownGroup))).thenReturn(differentClassExamples);	
+		when(selector.getNeighbours(5, generated, sum(examples, ownGroup))).thenReturn(differentClassExamples);	
 		assertTrue(checker.hasNeighbourFromClassNotBelongingToOutlier(generated, examples, ownGroup));
 	}
 	

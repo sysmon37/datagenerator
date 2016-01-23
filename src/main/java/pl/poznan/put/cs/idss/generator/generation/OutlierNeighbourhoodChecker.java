@@ -17,7 +17,7 @@ public class OutlierNeighbourhoodChecker {
         List<Example> copy = new ArrayList<Example>(examples);
         copy.addAll(currentGroup);
         List<Example> nearest = nearestNeighbourSelector.getNeighbours(5,
-                generated.getPoint(),
+                generated,
                 copy);
         int counter = 0;
         for (Example neighbour : nearest) {
