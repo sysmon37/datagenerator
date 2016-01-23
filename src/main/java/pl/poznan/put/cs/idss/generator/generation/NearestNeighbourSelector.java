@@ -8,18 +8,25 @@ public class NearestNeighbourSelector
 {
     public List<Example> getNeighbours(int K, Example target, List<Example> examples)
     {
-        TreeMap<Double, List<Example>> map = new TreeMap<Double, List<Example>>();
-        for (Example example : examples)
-            calculateDistancesAndGroupElement(K, target, map, example);
-        return extractKNearest(K, map);
+        TreeMap<Double, List<Integer>> map = new TreeMap<Double, List<Integer>>();
+        for (int i = 0 ; i < examples.size() ; ++i)
+        {
+        	Example example = examples.get(i);
+            double distance = example.getPoint().distance(target.getPoint());
+            calculateDistancesAndGroupElement(K, map, i, distance);
+        }
+        return extractKNearest(K, map, examples);
     }
 
-    private List<Example> extractKNearest(int K, TreeMap<Double, List<Example>> map)
+    private List<Example> extractKNearest(int K,
+    									  TreeMap<Double, List<Integer>> map,
+    									  List<Example> examples)
     {
         List<Example> nearest = new ArrayList<Example>();
-        for (List<Example> values : map.values())
+        for (List<Integer> values : map.values())
         {
-            nearest.addAll(values);
+            for(Integer i : values)
+            	nearest.add(examples.get(i));
             if (K <= nearest.size())
                 break;
         }
@@ -27,26 +34,25 @@ public class NearestNeighbourSelector
     }
 
     private void calculateDistancesAndGroupElement(int K,
-            Example target,
-            TreeMap<Double, List<Example>> map,
-            Example example)
+            TreeMap<Double, List<Integer>> map,
+            int exampleIndex,
+            double distance)
     {
-        double distance = example.getPoint().distance(target.getPoint());
         if (K > map.size() || distance < map.lastKey())
-            insert(map, example, distance);
+            insert(map, exampleIndex, distance);
         removeSubsetsIfIsTooMuch(K, map);
     }
 
-    private void insert(TreeMap<Double, List<Example>> map,
-            Example example,
+    private void insert(TreeMap<Double, List<Integer>> map,
+            int exampleIndex,
             double distance)
     {
         if (!map.containsKey(distance))
-            map.put(distance, new ArrayList<Example>());
-        map.get(distance).add(example);
+            map.put(distance, new ArrayList<Integer>());
+        map.get(distance).add(exampleIndex);
     }
 
-    private void removeSubsetsIfIsTooMuch(int K, TreeMap<Double, List<Example>> map)
+    private void removeSubsetsIfIsTooMuch(int K, TreeMap<Double, List<Integer>> map)
     {
         if (K < map.size())
             map.remove(map.lastKey());
