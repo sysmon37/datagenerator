@@ -10,8 +10,9 @@ import java.util.List;
 public class AdditionalPointGeneratorFactory {
 
     public AdditionalOutlierPointGenerator createOutlier(List<Example> examples,
-            Example generatedExample) {
-        return new AdditionalOutlierPointGenerator(generatedExample.getPoint(),
+            Example generatedExample)
+    {
+        return new AdditionalOutlierPointGenerator(generatedExample,
                 new NearestNeighbourSelector(),
                 new NeighbourhoodStandardDeviationCalculator(),
                 RandomGeneratorFactory.createOutliersGenerator(generatedExample.getPoint().getNumberOfDimensions()),

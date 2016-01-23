@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class AdditionalOutlierPointGeneratorTest
 {
-	private final Point middlePoint = new Point(Arrays.asList(200., -100.));
+	private final Example middle = new Example(new Point(Arrays.asList(200., -100.)), 0);
 	private final Point generatedPoint = new Point(Arrays.asList(201., -102.));
 	private List<Double> deviations = Arrays.asList(3.5, 2.8);
 	private NearestNeighbourSelector selector = mock(NearestNeighbourSelector.class);
@@ -30,11 +30,11 @@ public class AdditionalOutlierPointGeneratorTest
 	@Test
 	public void whenGenerateIsCalled_returnsPointBasedOnLocalNeighbourhoodOfTheMiddlePoint()
 	{
-		when(selector.getNeighbours(10, middlePoint, examples)).thenReturn(examples.subList(91, 100));
+		when(selector.getNeighbours(10, middle.getPoint(), examples)).thenReturn(examples.subList(91, 100));
 		when(calculator.calculateStandardDeviations(examples.subList(91, 100))).thenReturn(deviations);
-		when(numberGenerator.getNumbers()).thenReturn(Arrays.asList((generatedPoint.getValue(0) - middlePoint.getValue(0))/deviations.get(0),
-														 (generatedPoint.getValue(1) - middlePoint.getValue(1))/deviations.get(1)));
-		pointGenerator = new AdditionalOutlierPointGenerator(middlePoint, selector, calculator, numberGenerator, examples);
+		when(numberGenerator.getNumbers()).thenReturn(Arrays.asList((generatedPoint.getValue(0) - middle.getPoint().getValue(0))/deviations.get(0),
+														 (generatedPoint.getValue(1) - middle.getPoint().getValue(1))/deviations.get(1)));
+		pointGenerator = new AdditionalOutlierPointGenerator(middle, selector, calculator, numberGenerator, examples);
 		assertEquals(generatedPoint, pointGenerator.generate());
 	}
 }
