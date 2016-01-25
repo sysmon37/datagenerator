@@ -4,25 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class NearestNeighbourSelector
+interface DistanceCalculator<ExampleType>
 {
-    public List<Example> getNeighbours(int K, Example target, List<Example> examples)
+	public double calculate(ExampleType example, ExampleType target);
+}
+
+public class NearestNeighbourSelector<ExampleType>
+{
+	private DistanceCalculator<ExampleType> distanceCalculator;
+	
+	public NearestNeighbourSelector(DistanceCalculator<ExampleType> distanceCalculator)
+	{
+		this.distanceCalculator = distanceCalculator;
+	}
+	
+    public List<ExampleType> getNeighbours(int K, ExampleType target, List<ExampleType> examples)
     {
         TreeMap<Double, List<Integer>> map = new TreeMap<Double, List<Integer>>();
         for (int i = 0 ; i < examples.size() ; ++i)
         {
-        	Example example = examples.get(i);
-            double distance = example.getPoint().distance(target.getPoint());
+        	ExampleType example = examples.get(i);
+            double distance = distanceCalculator.calculate(example, target);
             calculateDistancesAndGroupElement(K, map, i, distance);
         }
         return extractKNearest(K, map, examples);
     }
 
-    private List<Example> extractKNearest(int K,
+    private List<ExampleType> extractKNearest(int K,
     									  TreeMap<Double, List<Integer>> map,
-    									  List<Example> examples)
+    									  List<ExampleType> examples)
     {
-        List<Example> nearest = new ArrayList<Example>();
+        List<ExampleType> nearest = new ArrayList<ExampleType>();
         for (List<Integer> values : map.values())
         {
             for(Integer i : values)

@@ -16,7 +16,7 @@ public class NearestNeighbourSelectorTest {
 
     private List<Example> examples = new ArrayList<Example>();
     private int K = 5;
-    private NearestNeighbourSelector selector = new NearestNeighbourSelector();
+    private NearestNeighbourSelector<Example> selector = new NearestNeighbourSelector<Example>(new ExampleDistanceCalculator());
 
     public NearestNeighbourSelectorTest() {
         for (int i = 1; i <= 10; ++i) {

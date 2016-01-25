@@ -1,5 +1,7 @@
 package pl.poznan.put.cs.idss.generator.factories;
 
+import pl.poznan.put.cs.idss.generator.generation.ExampleDistanceCalculator;
+import pl.poznan.put.cs.idss.generator.generation.Example;
 import pl.poznan.put.cs.idss.generator.generation.IsInsideForbiddenZoneChecker;
 import pl.poznan.put.cs.idss.generator.generation.NearestNeighbourSelector;
 import pl.poznan.put.cs.idss.generator.generation.OutlierGenerator;
@@ -20,7 +22,7 @@ class OutlierBuilder {
                         RandomGeneratorFactory.createOverlappingExamplesGenerator(regionsDependencyCreator.getMinCoordinate().getNumDimensions())),
                 new IsInsideForbiddenZoneChecker(regionsDependencyCreator.getRegionGenerators()),
                 new OutlierDistanceBreachedChecker(interOutlierDistance),
-                new OutlierNeighbourhoodChecker(new NearestNeighbourSelector()),
+                new OutlierNeighbourhoodChecker(new NearestNeighbourSelector<Example>(new ExampleDistanceCalculator())),
                 new AdditionalPointGeneratorFactory());
     }
 }
