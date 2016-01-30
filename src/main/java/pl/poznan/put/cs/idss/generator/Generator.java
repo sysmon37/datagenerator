@@ -52,10 +52,12 @@ public class Generator {
         int numPasses = Math.max(1, _settings.getNumLearnTestPairs());
         Ratio learnTestRatio = _settings.getLearnTestRatio();
         
+        log.info("Generating data set(s)");
         for (int p = 0; p < numPasses; p++) {
-            
+            log.info("Pass {}...", p + 1);
             for (int setIndex : Ratio.SET_INDEXES) 
                 if (learnTestRatio.get(setIndex) > 0.0) {
+                    log.info("{} set", setIndex == Ratio.LEARN ? "Learn" : "Test");
                     List<Example> examples = dataSetGenerator.generateExamples(setIndex);
                     processExamples(examples, setIndex, p);
                 }

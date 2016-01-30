@@ -11,7 +11,7 @@ public class GaussianDistributionGenerator extends RandomGenerator {
     private final double _numStandardDeviations;
 
     public GaussianDistributionGenerator(int numDimensions, double numStandardDeviations) {
-        this(numDimensions, numStandardDeviations, new MersenneTwister(RANDOM_SEED));
+        this(numDimensions, numStandardDeviations, new MersenneTwister());
     }
     
     public GaussianDistributionGenerator(int numDimensions, double numStandardDeviations, BitsStreamGenerator numberGenerator) {

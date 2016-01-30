@@ -115,7 +115,7 @@ public class GeneratorSettings {
     public void read(Configuration config) throws ConfigurationException {
         
         // Read information about attributes (currently limited to their number)
-        _numAttributes = extractInteger(config, KEY_ATTRIBUTES, true, (n) -> n > 0);
+        _numAttributes = extractInteger(config, KEY_ATTRIBUTES, true, (n) -> n > 0 && n <= 40);
         
         // Read information about classes
         readClasses(config);

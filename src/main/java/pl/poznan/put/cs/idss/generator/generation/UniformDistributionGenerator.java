@@ -1,13 +1,14 @@
 package pl.poznan.put.cs.idss.generator.generation;
 
 import org.apache.commons.math3.random.BitsStreamGenerator;
+import org.apache.commons.math3.random.MersenneTwister;
 
 
 public class UniformDistributionGenerator extends RandomGenerator
 {
 	public UniformDistributionGenerator(int numDimensions)
 	{
-		super(numDimensions);
+		this(numDimensions, new MersenneTwister());
 	}
 
 	public UniformDistributionGenerator(int numDimensions, BitsStreamGenerator numberGenerator)

@@ -7,9 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang3.StringUtils;
 
+@Slf4j
 public class ARFFWriter {
 
     private GeneratorSettings _settings = null;
@@ -26,6 +28,7 @@ public class ARFFWriter {
 //            if (!description.isEmpty())
 //                writer.write(prepareDescription(description) + "\n");
             
+            log.info("Saving file {}...", fileName);
             boolean anyLabeledClasses = !_settings.getLabeledClassIndexes().isEmpty();
             // header (relation)
             writer.write("@relation GENERATED\n");

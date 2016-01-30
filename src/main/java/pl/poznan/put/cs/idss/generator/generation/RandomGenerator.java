@@ -26,7 +26,7 @@ public abstract class RandomGenerator {
     }
 
     public RandomGenerator(int numDimensions) {
-        this(numDimensions, new MersenneTwister(RANDOM_SEED));
+        this(numDimensions, new MersenneTwister());
     }
     
     public RandomGenerator(int numDimensions, BitsStreamGenerator numberGenerator) {
