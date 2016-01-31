@@ -198,7 +198,7 @@ public class OutlierTest
 		whenGeneratesRareCases_returnsRareCases();
 		Example testExample = new Example(new Point(Arrays.asList(11.0)), classIndex);
 		when(additionaPointGenerator.generate()).thenReturn(testExample.getPoint());
-		assertEquals(Arrays.asList(testExample), outlier.generateTestExamples());
+                assertEquals(Arrays.asList(testExample), outlier.generateTestExamples());
 	}
 	
 	@Test
@@ -240,11 +240,15 @@ public class OutlierTest
 	
 	private OutlierDescription createOutlierDescription()
 	{
-		return new OutlierDescription( OutlierType.OUTLIER, classIndex);
+		OutlierDescription od = new OutlierDescription( OutlierType.OUTLIER, classIndex);
+                od.numTestExamples = 1;
+                return od;
 	}
 	
 	private OutlierDescription createRareCaseDescription()
 	{
-		return new OutlierDescription( OutlierType.RARE_CASE, classIndex);
+		OutlierDescription od = new OutlierDescription( OutlierType.RARE_CASE, classIndex);
+                od.numTestExamples = 1;
+                return od;
 	}
 }
