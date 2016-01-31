@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AdditionalPointGeneratorFactory {
 
-    public AdditionalOutlierPointGenerator createOutlier(List<Example> examples,
+    public AdditionalOutlierPointGenerator create(List<Example> examples,
             Example generatedExample)
     {
         return new AdditionalOutlierPointGenerator(generatedExample,

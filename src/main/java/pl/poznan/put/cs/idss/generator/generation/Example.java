@@ -56,6 +56,7 @@ public class Example {
         return _point.toString() + ", " + classOrLabelName;
     }
     
+        
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof Example)) {

@@ -57,7 +57,7 @@ public class Generator {
             log.info("Pass {}...", p + 1);
             for (int setIndex : Ratio.SET_INDEXES) 
                 if (learnTestRatio.get(setIndex) > 0.0) {
-                    log.info("{} set", setIndex == Ratio.LEARN ? "Learn" : "Test");
+                    log.info("{} set", setIndex == Ratio.LEARN ? "Learning" : "Testing");
                     List<Example> examples = dataSetGenerator.generateExamples(setIndex);
                     processExamples(examples, setIndex, p);
                 }

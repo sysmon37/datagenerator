@@ -11,10 +11,15 @@ public class OutlierDescription
 	public int classIndex;
 	public OutlierType type;
 	public Point middle;
+        
+        public int numTestExamples = 0;
+        public int numLearnExamples = 0;
 
 	public OutlierDescription(OutlierType type, int classIndex)
 	{
 		this.classIndex = classIndex;
-		this.type = type;		
+		this.type = type;	
+                this.numLearnExamples = this.type.numLearnExamplesPerGroup();
+
 	}
 }

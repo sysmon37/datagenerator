@@ -7,6 +7,7 @@ import pl.poznan.put.cs.idss.generator.factories.OutlierDescription;
 import pl.poznan.put.cs.idss.generator.factories.RegionDescription;
 import pl.poznan.put.cs.idss.generator.generation.OutlierType;
 import java.util.Arrays;
+import java.util.Collections;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -70,14 +71,29 @@ public class ParameterExtractor {
 
         for (int c = 0; c < _settings.getNumClasses(); c++) {
             Class clazz = _settings.getClass(c);
-            Ratio exampleTypeDistribution = clazz.getExampleTypeDistribution(Ratio.LEARN);
+            Ratio learnExampleTypeDistribution = clazz.getExampleTypeDistribution(Ratio.LEARN);
+            Ratio testExampleTypeDistribution = clazz.getExampleTypeDistribution(Ratio.TEST);
             for (int t : Arrays.asList(Ratio.OUTLIER, Ratio.RARE)) {
+                OutlierType outlierType = t == Ratio.OUTLIER ? OutlierType.OUTLIER : OutlierType.RARE_CASE;
+                List<OutlierDescription> descriptions = new ArrayList<>();
                 // group is a single outlier or an "island of NUM_RARE_PER_GROUP rare cases
-                int numGroups = (int) exampleTypeDistribution.get(t);
-                if (t == Ratio.RARE)
-                    numGroups /= GeneratorSettings.NUM_RARE_PER_GROUP;
-                for (int g = 0; g < numGroups; g++)
-                    outlierDescriptions.add(new OutlierDescription(t == Ratio.OUTLIER ? OutlierType.OUTLIER : OutlierType.RARE_CASE, c));
+                int numGroups = (int) learnExampleTypeDistribution.get(t) / outlierType.numLearnExamplesPerGroup();
+                List<Integer> descriptionIndexes = new ArrayList<>(numGroups);
+                for (int g = 0; g < numGroups; g++) {
+                    descriptions.add(new OutlierDescription(outlierType, c));
+                    descriptionIndexes.add(g);
+                }
+                int numRemainingTestExamples = (int) testExampleTypeDistribution.get(t);
+                while (numRemainingTestExamples > 0) {
+                    Collections.shuffle(descriptionIndexes);
+                    for (int d : descriptionIndexes) {
+                        descriptions.get(d).numTestExamples++;
+                        numRemainingTestExamples--;
+                        if (numRemainingTestExamples == 0)
+                            break;
+                    }
+                }
+                outlierDescriptions.addAll(descriptions);
             }
         }
         return outlierDescriptions;

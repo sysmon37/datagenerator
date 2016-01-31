@@ -2,6 +2,7 @@ package pl.poznan.put.cs.idss.generator.generation;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Data;
 
 import pl.poznan.put.cs.idss.generator.factories.AdditionalPointGeneratorFactory;
 import pl.poznan.put.cs.idss.generator.factories.OutlierDescription;
@@ -15,7 +16,7 @@ public class OutlierGenerator {
     private OutlierDistanceBreachedChecker distanceChecker;
     private OutlierNeighbourhoodChecker neighbourhoodChecker;
     private final static int GENERATION_OUTLIER_TRIALS_NUMBER = 10000;
-    private List<GeneratorAndExamples> pointGeneratorsAndTheirExamples;
+    private List<PointGeneratorAndExamples> pointGeneratorsAndTheirExamples;
     private List<Example> copyOfExistingExamples;
     private List<Example> outliers = new ArrayList<>();
     private AdditionalPointGeneratorFactory additionalPointGeneratorFactory;
@@ -45,7 +46,7 @@ public class OutlierGenerator {
         copyOfExistingExamples = new ArrayList<>(existingExamples);
         pointGeneratorsAndTheirExamples = new ArrayList<>();
         for (OutlierDescription outlierDescription : outlierDescriptions) {
-            Example.Label label = outlierDescription.type.equals(OutlierType.OUTLIER) ? Example.Label.OUTLIER : Example.Label.RARE;
+            Example.Label label = outlierDescription.type.toExampleLabel();
 
             List<Example> currentGroup = new ArrayList<>();
 
@@ -56,8 +57,8 @@ public class OutlierGenerator {
             currentGroup.add(firstExample);
             outlierDescription.middle = firstExample.getPoint();
 
-            AdditionalOutlierPointGenerator additionalPointGenerator = additionalPointGeneratorFactory.createOutlier(existingExamples, firstExample);
-            while (currentGroup.size() < outlierDescription.type.numLearnExamplesPerGroup()) {
+            AdditionalOutlierPointGenerator additionalPointGenerator = additionalPointGeneratorFactory.create(existingExamples, firstExample);
+            while (currentGroup.size() < outlierDescription.numLearnExamples) {
                 Example nextExample = generate(currentGroup,
                         outlierDescription.classIndex,
                         additionalPointGenerator);
@@ -65,7 +66,7 @@ public class OutlierGenerator {
                 currentGroup.add(nextExample);
             }
 
-            pointGeneratorsAndTheirExamples.add(new GeneratorAndExamples(additionalPointGenerator, currentGroup));
+            pointGeneratorsAndTheirExamples.add(new PointGeneratorAndExamples(additionalPointGenerator, currentGroup, outlierDescription));
             outliers.addAll(currentGroup);
             copyOfExistingExamples.addAll(currentGroup);
         }
@@ -95,25 +96,32 @@ public class OutlierGenerator {
 
     public List<Example> generateTestExamples() {
         if (pointGeneratorsAndTheirExamples == null) {
-            throw new IllegalArgumentException("Generating test cases must be preceded by generating training cases!");
+            throw new IllegalArgumentException("Generating testing examples must be preceded by generating learning examples!");
         }
-        List<Example> result = new ArrayList<Example>();
-        for (GeneratorAndExamples item : pointGeneratorsAndTheirExamples) {
-            result.add(generate(item.examples,
-                    item.examples.get(0).getClassIndex(),
-                    item.generator));
+        List<Example> result = new ArrayList<>();
+        for (PointGeneratorAndExamples pge : pointGeneratorsAndTheirExamples) {
+            for (int i = 0; i <  pge.getOutlierDescription().numTestExamples; i++) {
+                Example example = generate(pge.getExamples(),
+                        pge.getOutlierDescription().classIndex,
+                        pge.getGenerator());
+                example.setLabel(pge.getOutlierDescription().type.toExampleLabel());
+                result.add(example);
+            }
         }
         return result;
     }
 }
 
-class GeneratorAndExamples {
+@Data
+class PointGeneratorAndExamples {
 
-    public PointGenerator generator;
-    public List<Example> examples;
+    private PointGenerator _generator;
+    private List<Example> _examples;
+    private OutlierDescription _outlierDescription;  
 
-    public GeneratorAndExamples(PointGenerator generator, List<Example> examples) {
-        this.generator = generator;
-        this.examples = examples;
+    public PointGeneratorAndExamples(PointGenerator generator, List<Example> examples, OutlierDescription outlierDescription) {
+        _generator = generator;
+        _examples = examples;
+        _outlierDescription = outlierDescription;
     }
 }

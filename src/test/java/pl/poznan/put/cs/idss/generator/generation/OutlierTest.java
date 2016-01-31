@@ -43,7 +43,7 @@ public class OutlierTest
 		for(double i = 0 ; i < 100 ; ++i) 
 			examples.add(new Example(new Point(Arrays.asList(i)), classIndex));
 		
-		when(additionalPointGeneratorFactory.createOutlier(examples, generateExample)).thenReturn(additionaPointGenerator);
+		when(additionalPointGeneratorFactory.create(examples, generateExample)).thenReturn(additionaPointGenerator);
 		when(firstPointGenerator.generate()).thenReturn(generateExample.getPoint());
 		when(additionaPointGenerator.generate()).thenReturn(secondExample.getPoint());
 	}

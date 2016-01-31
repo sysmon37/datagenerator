@@ -2,6 +2,7 @@ package pl.poznan.put.cs.idss.generator.settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -10,6 +11,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.IntegerValidator;
+import pl.poznan.put.cs.idss.generator.generation.OutlierType;
 
 /**
  * Keeps all configuration settings extracted from a configuration file and from
@@ -29,7 +32,6 @@ import org.apache.commons.validator.routines.IntegerValidator;
  *
  * @author swilk
  */
-@ToString
 @Getter
 @Slf4j
 public class GeneratorSettings {
@@ -442,14 +444,14 @@ public class GeneratorSettings {
     private void distributeExamples() {
         _learnTestDistribution = calculateDistribution(_learnTestRatio, _numExamples);
 
-        log.debug("Into learn and test sets: #{} : {} -> #{}", getNumExamples(), _learnTestRatio, _learnTestDistribution);
+        log.debug("Distributing all examples into learning and testing parts: #{} ({}) ==> #{}", getNumExamples(), _learnTestRatio, _learnTestDistribution);
         for (int s = 0; s < Ratio.SIZE_LEARN_TEST; s++) {
             if (_learnTestDistribution.get(s) == 0)
                 continue;
-            log.debug(s == Ratio.LEARN ? "*LEARN*" : "*TEST*");
+            log.debug(s == Ratio.LEARN ? "Learning part" : "Testing part");
             Ratio classDistribution = calculateDistribution(_classRatio, (int) _learnTestDistribution.get(s));
             setClassDitribution(s, classDistribution);
-            log.debug("Before correction: Into classes: #{} : {} -> #{}", _learnTestDistribution.get(s), _classRatio, classDistribution);
+            log.debug("  Distributing examples into classes: #{} ({}) ==> #{} (initial attempt)", _learnTestDistribution.get(s), _classRatio, classDistribution);
             boolean corrected;
             do {
                 corrected = false;
@@ -457,19 +459,19 @@ public class GeneratorSettings {
                     Class clazz = getClass(c);
                     int numExamples = (int) getClassDistribution(s).get(c);
                     Ratio exampleTypeDistribution = calculateDistribution(clazz.getExampleTypeRatio(), numExamples, true);
-                    log.debug("Class {} into examples types: #{} : {} -> #{}", c + 1, numExamples, clazz.getExampleTypeRatio(), exampleTypeDistribution);       
+                    log.debug("    Distributing class {} into examples types: #{} ({}) ==> #{}", c + 1, numExamples, clazz.getExampleTypeRatio(), exampleTypeDistribution);       
                     // Correction of RARE cases is necessary only for learning set (we need to have
                     // sufficiently "large" groups of rare cases. For testing set we select 
                     // "representives" of these grops
                     if (s == Ratio.LEARN) {
                         int numRare = (int) exampleTypeDistribution.get(Ratio.RARE);
-                        int numRemaining = numRare % NUM_RARE_PER_GROUP;
+                        int numRemaining = numRare % OutlierType.RARE_CASE.numLearnExamplesPerGroup();
                         if (numRare == exampleTypeDistribution.getTotal() && numRemaining > 0) {
-                            log.debug("Class {} needs to be corrected/adjusted [{} remaining/missing examples]", c + 1, numRemaining);
+                            log.debug("   Class {} needs to be corrected/adjusted [{} remaining/missing RARE examples]", c + 1, numRemaining);
                             corrected = true;
                             int d = (int) classDistribution.get(c);
-                            if (numRemaining >= NUM_RARE_PER_GROUP / 2.0) 
-                                classDistribution.set(c, d + NUM_RARE_PER_GROUP - numRemaining);
+                            if (numRemaining >= OutlierType.RARE_CASE.numLearnExamplesPerGroup() / 2.0) 
+                                classDistribution.set(c, d + OutlierType.RARE_CASE.numLearnExamplesPerGroup() - numRemaining);
                             else
                                 classDistribution.set(c, d - numRemaining);     
                             setClassDitribution(s, classDistribution);
@@ -478,13 +480,13 @@ public class GeneratorSettings {
                     clazz.setExampleTypeDistribution(s, exampleTypeDistribution);
                 }
             } while (corrected);
-            log.debug("After correction: splitting into classes: #{} : {} -> #{}", _learnTestDistribution.get(s), _classRatio, classDistribution);
+            log.debug("  Distributing examples into classes: #{} ({}) ==> #{} (after possible correction)", _learnTestDistribution.get(s), _classRatio, classDistribution);
             setClassDitribution(s, classDistribution);
             _learnTestDistribution.set(s, classDistribution.getTotal());
             
             for (int c = 0; c < getNumClasses(); c++) {
                 Class clazz = getClass(c);
-                log.debug("Class {} into examples types: #{} : {} -> #{}", c + 1, clazz.getNumExamples(s),clazz.getExampleTypeRatio(), clazz.getExampleTypeDistribution(s));                    
+                log.debug("    Distributing class {} into examples types: #{} ({}) ==> #{}", c + 1, clazz.getNumExamples(s),clazz.getExampleTypeRatio(), clazz.getExampleTypeDistribution(s));                    
                 distributeExamplesIntoRegions(s, c);
             }
         }
@@ -499,7 +501,7 @@ public class GeneratorSettings {
         Ratio regionDistribution = calculateDistribution(clazz.getRegionRatio(), numSafeBorder);                
         clazz.setRegionDistribution(setIndex, regionDistribution);
         Ratio safeBorderFractions = clazz.getExampleTypeRatio().subRatio(Ratio.SAFE, 2).toFractions();
-        log.debug("Safe-Border fractions: {}", safeBorderFractions);
+        log.debug("      Ratio of SAFE:BORDER examples: {}", safeBorderFractions);
         int[][] numDistributed = new int[clazz.getNumRegions()][2];
         for (int r = 0; r < clazz.getNumRegions(); r++) {
             for (int t : Arrays.asList(Ratio.SAFE, Ratio.BORDER)) {
@@ -530,8 +532,11 @@ public class GeneratorSettings {
             }
         }
         
-        for (int r = 0 ; r < clazz.getNumRegions(); r++)
-            clazz.getRegion(r).setExampleTypeDistribution(setIndex, new Ratio((double) numDistributed[r][Ratio.SAFE], (double) numDistributed[r][Ratio.BORDER]));
+        for (int r = 0 ; r < clazz.getNumRegions(); r++) {
+            Region region = clazz.getRegion(r);
+            region.setExampleTypeDistribution(setIndex, new Ratio((double) numDistributed[r][Ratio.SAFE], (double) numDistributed[r][Ratio.BORDER]));
+            log.debug("      Distributing region {} into examples types: #{} ==> {}", r + 1, region.getNumExamples(setIndex), region.getExampleTypeDistribution(setIndex));
+        }
           
     }
     
@@ -632,5 +637,44 @@ public class GeneratorSettings {
     
     public String getFileName() {
         return getFileName(Ratio.LEARN);
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Formatter formatter = new Formatter(sb, Locale.US);
+        formatter.format("Final configuration:\nattributes = %d\nclasses = %d\nexamples = %d\n", getNumAttributes(),getNumClasses(), getNumExamples());
+        formatter.format("names.attributes = %s\nnames.classes = %s\nnames.decision = %s\n", 
+                String.join(", ", getAttributeNames()), String.join(", ", getClassNames()), getDecisionName());
+        if (getNumLearnTestPairs() > 0) {
+            formatter.format("learnTestRatio = %s\nlearnTestPairs = %d\nfileName.learn = %s\nfileName.test = %s\n", 
+                    getLearnTestRatio(), getNumLearnTestPairs(), getLearnFileName(), getTestFileName());
+        } else
+            formatter.format("fileName = %s\n", getLearnFileName());
+        formatter.format("minOutlierDistance = %s\n", getMinOutlierDistance());
+        formatter.format("classRatio = %s\n", getClassRatio());
+        for (int c = 0; c < getNumClasses(); c++) {
+            Class clazz = getClass(c);
+            String classString = String.format("class.%d", c + 1);
+            formatter.format("%s.exampleTypeRatio = %s\n", classString, clazz.getExampleTypeRatio());
+            formatter.format("%s.regions = %d\n", classString, clazz.getNumRegions());
+            for (int r = 0; r < clazz.getNumRegions(); r++) {
+                Region region = clazz.getRegion(r);
+                String regionString = String.format("class.%d.region.%d", c + 1, r + 1);
+                formatter.format("%s.weight = %s\n", regionString, region.getWeight());
+                formatter.format("%s.shape = %s\n", regionString, region.getShape());
+                formatter.format("%s.distribution = %s\n", regionString, region.getDistribution());
+                formatter.format("%s.center = %s\n", regionString, region.getCenter());
+                formatter.format("%s.radius = %s\n", regionString, region.getRadius());
+                formatter.format("%s.borderZone = %s\n", regionString, region.getBorderZone());
+                formatter.format("%s.noOutlierZone = %s\n", regionString, region.getNoOutlierZone());
+                formatter.format("%s.rotations = %s\n", regionString, region.getRotations());
+            }
+        }
+        if (!getLabeledClassIndexes().isEmpty()) {            
+            formatter.format("exampleTypeLabels.classes = %s\n", getLabeledClassIndexes().stream().map((n) -> n + 1).map(Object::toString).collect(Collectors.joining(", ")));
+        }
+        
+        return sb.toString();
     }
 }

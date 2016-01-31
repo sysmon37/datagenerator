@@ -1,16 +1,17 @@
 package pl.poznan.put.cs.idss.generator.settings;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.apache.commons.lang3.Validate;
 
 /**
  *
  * @author swilk
  */
-@ToString @EqualsAndHashCode
+@EqualsAndHashCode
 public class NotEmptyDoubleList {
     protected List<Double> _values = new ArrayList<>();
 
@@ -31,6 +32,18 @@ public class NotEmptyDoubleList {
     
     public List<Double> asList() {
         return new ArrayList<>(_values);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size(); i++) {
+            if (i > 0)
+                sb.append(", ");
+            sb.append(get(i));
+        }
+        sb.append("]");
+        return sb.toString();
     }
     
 }
