@@ -1,7 +1,6 @@
 package pl.poznan.put.cs.idss.generator.settings;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import lombok.Data;
 
@@ -15,8 +14,8 @@ public class Class {
     private Ratio _exampleTypeRatio = null;
     private Ratio _regionRatio = null;
     
-    private Ratio[] _exampleTypeDistributions = new Ratio[Ratio.SIZE_LEARN_TEST];
-    private Ratio[] _regionDistributions = new Ratio[Ratio.SIZE_LEARN_TEST];
+    private Ratio[] _exampleTypeDistributions = new Ratio[] {new Ratio(Ratio.SIZE_EXAMPLE_TYPE, 0.0), new Ratio(Ratio.SIZE_EXAMPLE_TYPE, 0.0)};
+    private Ratio[] _regionDistributions = new Ratio[] {new Ratio(1, 1.0), new Ratio(1, 1.0)};;
     
 
     /**

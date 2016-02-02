@@ -13,6 +13,6 @@ public class Rotation {
     @Override
     public String toString() {
         Formatter formatter = new Formatter(Locale.US);
-        return formatter.format("(%d, %d) --> %s", _axis1, _axis2, _angle).toString();
+        return formatter.format("(%d, %d) --> %s", _axis1 + 1, _axis2 + 1, _angle).toString();
     }
 }

@@ -445,8 +445,8 @@ public class GeneratorSettings {
         _learnTestDistribution = calculateDistribution(_learnTestRatio, _numExamples);
 
         log.debug("Distributing all examples into learning and testing parts: #{} ({}) ==> #{}", getNumExamples(), _learnTestRatio, _learnTestDistribution);
-        for (int s = 0; s < Ratio.SIZE_LEARN_TEST; s++) {
-            if (_learnTestDistribution.get(s) == 0)
+        for (int s: Arrays.asList(Ratio.LEARN, Ratio.TEST)) {
+            if (_learnTestDistribution.get(s) == 0) 
                 continue;
             log.debug(s == Ratio.LEARN ? "Learning part" : "Testing part");
             Ratio classDistribution = calculateDistribution(_classRatio, (int) _learnTestDistribution.get(s));
