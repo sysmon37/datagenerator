@@ -10,21 +10,21 @@ import java.util.Map;
 
 public class DataSetGeneratorFactory {
 
-    public static DataSetGenerator create(double interOutlierDistance,
+    public static DataSetGenerator createDataSetGenerator(double interOutlierDistance,
             List<RegionDescription> regionDescriptions,
             List<OutlierDescription> outlierDescriptions) {
-        RegionsDependencyCreator regionsDependencyCreator = new RegionsDependencyCreator(regionDescriptions);
-        OutlierGenerator outliersBuilder = OutlierBuilder.createOutlier(interOutlierDistance,
+        RegionGenerators allRegionGenerators = new RegionGenerators(regionDescriptions);
+        OutlierGenerator outliersBuilder = OutlierGeneratorFactory.createOutlierGenerator(interOutlierDistance,
                 outlierDescriptions,
-                regionsDependencyCreator);
-        return new DataSetGenerator(makeFlattened(regionsDependencyCreator.getRegionGenerators()), outliersBuilder);
+                allRegionGenerators);
+        return new DataSetGenerator(makeFlattened(allRegionGenerators.getRegionGenerators()), outliersBuilder);
     }
 
     private static List<RegionGenerator> makeFlattened(Map<Integer, List<RegionGenerator>> regions) {
-        List<RegionGenerator> generators = new ArrayList<RegionGenerator>();
-        for (List<RegionGenerator> generatorsForClass : regions.values()) {
+        List<RegionGenerator> generators = new ArrayList<>();
+        regions.values().stream().forEach((generatorsForClass) -> {
             generators.addAll(generatorsForClass);
-        }
+        });
         return generators;
     }
 }

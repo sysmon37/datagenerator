@@ -57,7 +57,7 @@ public class OutlierGenerator {
             currentGroup.add(firstExample);
             outlierDescription.middle = firstExample.getPoint();
 
-            AdditionalOutlierPointGenerator additionalPointGenerator = additionalPointGeneratorFactory.create(existingExamples, firstExample);
+            AdditionalOutlierPointGenerator additionalPointGenerator = additionalPointGeneratorFactory.createPointGenerator(existingExamples, firstExample);
             while (currentGroup.size() < outlierDescription.numLearnExamples) {
                 Example nextExample = generate(currentGroup,
                         outlierDescription.classIndex,

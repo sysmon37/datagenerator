@@ -44,7 +44,7 @@ public class Generator {
     public void generate() throws IOException {
         ParameterExtractor extractor = new ParameterExtractor(_settings);
            
-        DataSetGenerator dataSetGenerator = DataSetGeneratorFactory.create(
+        DataSetGenerator dataSetGenerator = DataSetGeneratorFactory.createDataSetGenerator(
                 extractor.getMinOutlierDistance(),
                 extractor.getRegionDescriptions(),
                 extractor.getOutlierDescriptions());     

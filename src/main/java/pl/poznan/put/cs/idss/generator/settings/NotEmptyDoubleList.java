@@ -1,9 +1,7 @@
 package pl.poznan.put.cs.idss.generator.settings;
 
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
-import java.util.Locale;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.Validate;
 
@@ -36,13 +34,12 @@ public class NotEmptyDoubleList {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[");
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < size(); i++) {
             if (i > 0)
                 sb.append(", ");
             sb.append(get(i));
         }
-        sb.append("]");
         return sb.toString();
     }
     

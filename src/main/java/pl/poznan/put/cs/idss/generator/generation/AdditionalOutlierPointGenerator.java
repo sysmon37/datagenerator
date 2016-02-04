@@ -1,14 +1,13 @@
 package pl.poznan.put.cs.idss.generator.generation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdditionalOutlierPointGenerator implements PointGenerator {
 
-    private Example middle;
+    private final Example middle;
     private static final int K_STANDARD_DEVIATION = 10;
-    private RandomGenerator generator;
-    private List<Double> deviations;
+    private final RandomGenerator generator;
+    private final List<Double> deviations;
 
     public AdditionalOutlierPointGenerator(Example middle,
             NearestNeighbourSelector selector,

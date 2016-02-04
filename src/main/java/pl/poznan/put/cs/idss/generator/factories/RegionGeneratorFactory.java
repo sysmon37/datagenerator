@@ -12,7 +12,7 @@ import pl.poznan.put.cs.idss.generator.generation.DataShape;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegionGeneratorBuilder {
+public class RegionGeneratorFactory {
 
     public static RegionGenerator createNonIntegumentalRegionGenerator(RegionDescription descr) {
         return createNonIntegumentalRegionGenerator(descr.getRegion(), descr.getClassIndex());

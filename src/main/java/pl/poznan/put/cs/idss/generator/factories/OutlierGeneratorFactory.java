@@ -1,7 +1,6 @@
 package pl.poznan.put.cs.idss.generator.factories;
 
 import pl.poznan.put.cs.idss.generator.generation.ExampleDistanceCalculator;
-import pl.poznan.put.cs.idss.generator.generation.Example;
 import pl.poznan.put.cs.idss.generator.generation.IsInsideForbiddenZoneChecker;
 import pl.poznan.put.cs.idss.generator.generation.NearestNeighbourSelector;
 import pl.poznan.put.cs.idss.generator.generation.OutlierGenerator;
@@ -11,18 +10,18 @@ import pl.poznan.put.cs.idss.generator.generation.OutlierNeighbourhoodChecker;
 
 import java.util.List;
 
-class OutlierBuilder {
+class OutlierGeneratorFactory {
 
-    public static OutlierGenerator createOutlier(double interOutlierDistance,
+    public static OutlierGenerator createOutlierGenerator(double interOutlierDistance,
             List<OutlierDescription> outlierDescriptions,
-            RegionsDependencyCreator regionsDependencyCreator) {
+            RegionGenerators allRegionGenerators) {
         return new OutlierGenerator(outlierDescriptions,
-                new OutlierFirstPointGenerator(regionsDependencyCreator.getMinCoordinate(),
-                        regionsDependencyCreator.getMaxCoordinate(),
-                        RandomGeneratorFactory.createOverlappingExamplesGenerator(regionsDependencyCreator.getMinCoordinate().getNumDimensions())),
-                new IsInsideForbiddenZoneChecker(regionsDependencyCreator.getRegionGenerators()),
+                new OutlierFirstPointGenerator(allRegionGenerators.getMinCoordinate(),
+                        allRegionGenerators.getMaxCoordinate(),
+                        RandomGeneratorFactory.createOverlappingExamplesGenerator(allRegionGenerators.getMinCoordinate().getNumDimensions())),
+                new IsInsideForbiddenZoneChecker(allRegionGenerators.getRegionGenerators()),
                 new OutlierDistanceBreachedChecker(interOutlierDistance),
-                new OutlierNeighbourhoodChecker(new NearestNeighbourSelector<Example>(new ExampleDistanceCalculator())),
+                new OutlierNeighbourhoodChecker(new NearestNeighbourSelector<>(new ExampleDistanceCalculator())),
                 new AdditionalPointGeneratorFactory());
     }
 }

@@ -10,13 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class RegionsDependencyCreator {
+class RegionGenerators {
 
     private final Map<Integer, List<RegionGenerator>> _regionGenerators = new HashMap<>();
     private Coordinate _minCoordinate = null;
     private Coordinate _maxCoordinate = null;
 
-    public RegionsDependencyCreator(List<RegionDescription> regionDescriptions) {
+    public RegionGenerators(List<RegionDescription> regionDescriptions) {
         List<RegionDescription> integumentalRegions = new ArrayList<>();
         List<RegionGenerator> otherGenerators = new ArrayList<>();
 
@@ -24,14 +24,14 @@ class RegionsDependencyCreator {
             if (descr.getRegion().getShape() == ShapeType.INTEGUMENTAL) {
                 integumentalRegions.add(descr);
             } else {
-                RegionGenerator generator = RegionGeneratorBuilder.createNonIntegumentalRegionGenerator(descr);
+                RegionGenerator generator = RegionGeneratorFactory.createNonIntegumentalRegionGenerator(descr);
                 addRegionGenerator(descr.getClassIndex(), generator);
                 otherGenerators.add(generator);
             }
         }
 
         for (RegionDescription descr : integumentalRegions) {
-            addRegionGenerator(descr.getClassIndex(), RegionGeneratorBuilder.createIntegumentalRegionGenerator(descr, otherGenerators));
+            addRegionGenerator(descr.getClassIndex(), RegionGeneratorFactory.createIntegumentalRegionGenerator(descr, otherGenerators));
         }
 
         updateCoordinates(regionDescriptions);

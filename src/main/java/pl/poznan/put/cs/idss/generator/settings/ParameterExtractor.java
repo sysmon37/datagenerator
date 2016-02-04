@@ -76,7 +76,7 @@ public class ParameterExtractor {
             for (int t : Arrays.asList(Ratio.OUTLIER, Ratio.RARE)) {
                 OutlierType outlierType = t == Ratio.OUTLIER ? OutlierType.OUTLIER : OutlierType.RARE_CASE;
                 List<OutlierDescription> descriptions = new ArrayList<>();
-                // group is a single outlier or an "island of NUM_RARE_PER_GROUP rare cases
+                // group is a single outlier or an "island" of NUM_RARE_PER_GROUP rare cases
                 int numGroups = (int) learnExampleTypeDistribution.get(t) / outlierType.numLearnExamplesPerGroup();
                 List<Integer> descriptionIndexes = new ArrayList<>(numGroups);
                 for (int g = 0; g < numGroups; g++) {
