@@ -1,7 +1,6 @@
 package pl.poznan.put.cs.idss.generator.generation;
 
 import pl.poznan.put.cs.idss.generator.settings.Region;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HyperCircularDataShape extends DataShape {

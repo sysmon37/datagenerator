@@ -5,7 +5,6 @@ import pl.poznan.put.cs.idss.generator.settings.ShapeType;
 import pl.poznan.put.cs.idss.generator.generation.RegionGenerator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
