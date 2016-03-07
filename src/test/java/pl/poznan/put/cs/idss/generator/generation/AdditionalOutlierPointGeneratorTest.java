@@ -15,7 +15,7 @@ public class AdditionalOutlierPointGeneratorTest
 	private final Example middle = new Example(new Point(Arrays.asList(200., -100.)), 0);
 	private final Point generatedPoint = new Point(Arrays.asList(201., -102.));
 	private List<Double> deviations = Arrays.asList(3.5, 2.8);
-	private NearestNeighbourSelector selector = mock(NearestNeighbourSelector.class);
+	private NearestNeighbourSelector<Example> selector = mock(NearestNeighbourSelector.class);
 	private NeighbourhoodStandardDeviationCalculator calculator = mock(NeighbourhoodStandardDeviationCalculator.class);
 	private RandomGenerator numberGenerator = mock(RandomGenerator.class);
 	private List<Example> examples = new ArrayList<>();

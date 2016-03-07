@@ -5,9 +5,9 @@ import java.util.List;
 
 public class OutlierNeighbourhoodChecker {
 
-    private NearestNeighbourSelector nearestNeighbourSelector;
+    private NearestNeighbourSelector<Example> nearestNeighbourSelector;
 
-    public OutlierNeighbourhoodChecker(NearestNeighbourSelector nearestNeighbourSelector) {
+    public OutlierNeighbourhoodChecker(NearestNeighbourSelector<Example> nearestNeighbourSelector) {
         this.nearestNeighbourSelector = nearestNeighbourSelector;
     }
 

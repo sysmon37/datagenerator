@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class OutlierNeighbourhoodCheckerTest
 {
-	private NearestNeighbourSelector selector = mock(NearestNeighbourSelector.class);
+	private NearestNeighbourSelector<Example> selector = mock(NearestNeighbourSelector.class);
 	private int classIndex = 0;
 	private List<Example> examples = new ArrayList<Example>();
 	private Example generated = new Example(new Point(Arrays.asList(-66.)), classIndex);
