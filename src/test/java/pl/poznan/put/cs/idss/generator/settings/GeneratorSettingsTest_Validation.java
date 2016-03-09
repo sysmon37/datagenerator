@@ -1,6 +1,5 @@
 package pl.poznan.put.cs.idss.generator.settings;
 
-import pl.poznan.put.cs.idss.generator.settings.GeneratorSettings;
 import java.util.Properties;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;

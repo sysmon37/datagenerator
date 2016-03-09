@@ -13,7 +13,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import lombok.Getter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -517,7 +516,9 @@ public class GeneratorSettings {
                     double minFraction = 1.0;
                     for (int r = 0; r < clazz.getNumRegions(); r++) {
                         if (numDistributed[r][Ratio.SAFE] + numDistributed[r][Ratio.BORDER] < regionDistribution.get(r)) {
-                            double fraction = (double) numDistributed[r][t] / (numDistributed[r][Ratio.SAFE] + numDistributed[r][Ratio.BORDER]);
+                            double fraction = 0.0;
+                            if ((numDistributed[r][Ratio.SAFE] + numDistributed[r][Ratio.BORDER]) > 0) 
+                                fraction = (double) numDistributed[r][t] / (numDistributed[r][Ratio.SAFE] + numDistributed[r][Ratio.BORDER]);
                             if (fraction <= minFraction) {
                                 foundRegionIndex = r;
                                 minFraction = fraction;

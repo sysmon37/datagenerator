@@ -4,7 +4,9 @@ import pl.poznan.put.cs.idss.generator.settings.GeneratorSettings;
 import pl.poznan.put.cs.idss.generator.settings.Class;
 import pl.poznan.put.cs.idss.generator.settings.Ratio;
 import java.util.Properties;
+import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.MapConfiguration;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import org.junit.Before;
@@ -16,25 +18,52 @@ import static org.junit.Assert.*;
  * @author swilk
  */
 public class GeneratorSettingsTest_ClassDistributionAdjustment {
-    private GeneratorSettings _settings = null;
+    private GeneratorSettings _settings = new GeneratorSettings();
     private static final String CONFIG = "paw3-2d.conf";
-    private final Properties _properties = new Properties();
+    private final Properties _common = new Properties();
+    private final Properties _changed = new Properties();
         
     public GeneratorSettingsTest_ClassDistributionAdjustment() {
-        _properties.setProperty("classRatio", "1:7");
-        _properties.setProperty("examples", "1000");
+        _common.setProperty("attributes", "2");
+        _common.setProperty("classes", "2");
+        _common.setProperty("classRatio", "1:7");
+        _common.setProperty("examples", "1000");
+        _common.setProperty("learnTestRatio", "1:0");
+        _common.setProperty("minOutlierDistance", "1");
+        _common.setProperty("defaultRegion.weight", "1");
+        _common.setProperty("defaultRegion.distribution", "U");
+        _common.setProperty("defaultRegion.borderZone", "3");
+        _common.setProperty("defaultRegion.noOutlierZone", "1.5");
+        _common.setProperty("defaultRegion.shape", "C");
+        _common.setProperty("defaultRegion.radius", "2, 1");
+        _common.setProperty("defaultClass.exampleTypeRatio", "100:0:0:0");
+        _common.setProperty("class.1.regions", "3");
+        _common.setProperty("class.1.region.1.center", "5, 5");
+        _common.setProperty("class.1.region.1.rotation", "1, 2, 45");
+        _common.setProperty("class.1.region.2.center", "-5, 3");
+        _common.setProperty("class.1.region.2.rotation", "1, 2, -45");
+        _common.setProperty("class.1.region.3.center", "0, -5");
+        _common.setProperty("class.2.regions", "1");
+        _common.setProperty("class.2.region.1.shape", "I");
+        _common.setProperty("class.2.region.1.center", "0, 0");
+        _common.setProperty("class.2.region.1.radius", "10, 10");
+        _common.setProperty("fileName", "paw3-2d.arff");        
     }
     
     @Before
     public void setUp() {
-        _settings = new GeneratorSettings();
-    }
+       _settings = new GeneratorSettings();
+   }
     
     @Test
     public void distributeExamples_onlyRareInMinorityClass_trainNoTest() throws ConfigurationException {
-        _properties.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("learnTestRatio", "100:0");
-        _settings.read(CONFIG, _properties);
+        _changed.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("learnTestRatio", "100:0");
+
+        CompositeConfiguration config = new CompositeConfiguration();
+        config.addConfiguration(new MapConfiguration(_changed));
+        config.addConfiguration(new MapConfiguration(_common));        
+        _settings.read(config);
       
         Class minorityClass = _settings.getClass(0);
         Class majorityClass = _settings.getClass(1);
@@ -47,10 +76,14 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
 
     @Test
     public void distributeExamples_onlyRareInBothClasses_trainNoTest() throws ConfigurationException {
-        _properties.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("class.2.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("learnTestRatio", "100:0");
-        _settings.read(CONFIG, _properties);
+        _changed.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("class.2.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("learnTestRatio", "100:0");
+
+        CompositeConfiguration config = new CompositeConfiguration();
+        config.addConfiguration(new MapConfiguration(_changed));
+        config.addConfiguration(new MapConfiguration(_common));        
+        _settings.read(config);
       
         Class minorityClass = _settings.getClass(0);
         Class majorityClass = _settings.getClass(1);
@@ -64,14 +97,17 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
     
     @Test
     public void distributeExamples_onlyRareInMinorityClass_trainAndTest() throws ConfigurationException {
-        _properties.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("learnTestRatio", "875:125");
-        _properties.setProperty("outputMode", "split");
-        _properties.setProperty("learnTestPairs", "1");
-        _properties.setProperty("fileName.learn", "learn%d");
-        _properties.setProperty("fileName.test", "test%d");
+        _changed.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("learnTestRatio", "875:125");
+        _changed.setProperty("outputMode", "split");
+        _changed.setProperty("learnTestPairs", "1");
+        _changed.setProperty("fileName.learn", "learn%d");
+        _changed.setProperty("fileName.test", "test%d");
         
-        _settings.read(CONFIG, _properties);
+        CompositeConfiguration config = new CompositeConfiguration();
+        config.addConfiguration(new MapConfiguration(_changed));
+        config.addConfiguration(new MapConfiguration(_common));        
+        _settings.read(config);
       
         Class minorityClass = _settings.getClass(0);
         Class majorityClass = _settings.getClass(1);
@@ -96,15 +132,18 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
 
     @Test
     public void distributeExamples_onlyRareInBothClasses_trainAndTest_875_125() throws ConfigurationException {
-        _properties.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("class.2.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("learnTestRatio", "875:125");
-        _properties.setProperty("outputMode", "split");
-        _properties.setProperty("learnTestPairs", "1");
-        _properties.setProperty("fileName.learn", "learn%d");
-        _properties.setProperty("fileName.test", "test%d");
+        _changed.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("class.2.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("learnTestRatio", "875:125");
+        _changed.setProperty("outputMode", "split");
+        _changed.setProperty("learnTestPairs", "1");
+        _changed.setProperty("fileName.learn", "learn%d");
+        _changed.setProperty("fileName.test", "test%d");
         
-        _settings.read(CONFIG, _properties);
+        CompositeConfiguration config = new CompositeConfiguration();
+        config.addConfiguration(new MapConfiguration(_changed));
+        config.addConfiguration(new MapConfiguration(_common));        
+        _settings.read(config);
       
         Class minorityClass = _settings.getClass(0);
         Class majorityClass = _settings.getClass(1);
@@ -129,15 +168,18 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
 
     @Test
     public void distributeExamples_onlyRareInBothClasses_trainAndTest_710_290() throws ConfigurationException {
-        _properties.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("class.2.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("learnTestRatio", "710:290");
-        _properties.setProperty("outputMode", "split");
-        _properties.setProperty("learnTestPairs", "1");
-        _properties.setProperty("fileName.learn", "learn%d");
-        _properties.setProperty("fileName.test", "test%d");
+        _changed.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("class.2.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("learnTestRatio", "710:290");
+        _changed.setProperty("outputMode", "split");
+        _changed.setProperty("learnTestPairs", "1");
+        _changed.setProperty("fileName.learn", "learn%d");
+        _changed.setProperty("fileName.test", "test%d");
         
-        _settings.read(CONFIG, _properties);
+        CompositeConfiguration config = new CompositeConfiguration();
+        config.addConfiguration(new MapConfiguration(_changed));
+        config.addConfiguration(new MapConfiguration(_common));        
+        _settings.read(config);
       
         Class minorityClass = _settings.getClass(0);
         Class majorityClass = _settings.getClass(1);
@@ -161,15 +203,18 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
 
     @Test
     public void distributeExamples_onlyRareInBothClasses_trainAndTest_500_500() throws ConfigurationException {
-        _properties.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("class.2.exampleTypeRatio", "0:0:100:0");
-        _properties.setProperty("learnTestRatio", "500:500");
-        _properties.setProperty("outputMode", "split");
-        _properties.setProperty("learnTestPairs", "1");
-        _properties.setProperty("fileName.learn", "learn%d");
-        _properties.setProperty("fileName.test", "test%d");
+        _changed.setProperty("class.1.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("class.2.exampleTypeRatio", "0:0:100:0");
+        _changed.setProperty("learnTestRatio", "500:500");
+        _changed.setProperty("outputMode", "split");
+        _changed.setProperty("learnTestPairs", "1");
+        _changed.setProperty("fileName.learn", "learn%d");
+        _changed.setProperty("fileName.test", "test%d");
         
-        _settings.read(CONFIG, _properties);
+        CompositeConfiguration config = new CompositeConfiguration();
+        config.addConfiguration(new MapConfiguration(_changed));
+        config.addConfiguration(new MapConfiguration(_common));        
+        _settings.read(config);
       
         Class minorityClass = _settings.getClass(0);
         Class majorityClass = _settings.getClass(1);
