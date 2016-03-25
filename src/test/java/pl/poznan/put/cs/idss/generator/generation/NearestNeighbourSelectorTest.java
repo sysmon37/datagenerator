@@ -1,7 +1,6 @@
 package pl.poznan.put.cs.idss.generator.generation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import pl.poznan.put.cs.idss.generator.generation.Example;
 import pl.poznan.put.cs.idss.generator.generation.NearestNeighbourSelector;
 import pl.poznan.put.cs.idss.generator.generation.Point;
@@ -55,6 +54,35 @@ public class NearestNeighbourSelectorTest {
                 examples);
         assertElementsAreIdentical(examples.subList(1, 7), nearest);
     }
+
+	@Test
+	public void whenCalculatesNeighbours_theTargetIsOmittedInResult()
+	{
+		List<Example> neighbours = selector.getNeighbours(K, new Example(examples.get(4).getPoint(), examples.get(4).getClassIndex()), examples);
+		assertFalse(neighbours.contains(examples.get(4)));
+		assertTrue(neighbours.contains(examples.get(1)));
+		assertTrue(neighbours.contains(examples.get(2)));
+		assertTrue(neighbours.contains(examples.get(3)));
+		assertTrue(neighbours.contains(examples.get(5)));
+		assertTrue(neighbours.contains(examples.get(6)));
+		assertTrue(neighbours.contains(examples.get(7)));
+		assertEquals(6, neighbours.size());
+	}
+
+	@Test
+	public void whenTargetOccursMoreThanOnce_targetAppearsAlsoInTheResult()
+	{
+		examples.add(new Example(examples.get(4).getPoint(), examples.get(4).getClassIndex()));
+		List<Example> neighbours = selector.getNeighbours(K, examples.get(4), examples);
+		assertTrue(neighbours.contains(examples.get(4)));
+		assertFalse(neighbours.contains(examples.get(1)));
+		assertTrue(neighbours.contains(examples.get(2)));
+		assertTrue(neighbours.contains(examples.get(3)));
+		assertTrue(neighbours.contains(examples.get(5)));
+		assertTrue(neighbours.contains(examples.get(6)));
+		assertFalse(neighbours.contains(examples.get(7)));
+		assertEquals(5, neighbours.size());
+	}
 
     private void assertElementsAreIdentical(List<Example> expected, List<Example> actual) {
         assertEquals(expected.size(), actual.size());

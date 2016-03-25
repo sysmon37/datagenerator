@@ -21,9 +21,15 @@ public class NearestNeighbourSelector<ExampleType>
     public List<ExampleType> getNeighbours(int K, ExampleType target, List<ExampleType> examples)
     {
         TreeMap<Double, List<Integer>> map = new TreeMap<Double, List<Integer>>();
+        boolean targetFoundInExamples = false;
         for (int i = 0 ; i < examples.size() ; ++i)
         {
         	ExampleType example = examples.get(i);
+            if(target.equals(example) && !targetFoundInExamples)
+            {
+                targetFoundInExamples = true;
+                continue;
+            }
             double distance = distanceCalculator.calculate(example, target);
             calculateDistancesAndGroupElement(K, map, i, distance);
         }
