@@ -32,13 +32,18 @@ public class Generator {
     private final static String OPTION_HELP = "help";
     private final static String OPTION_PROPERTY = "D";
 
-    private ARFFWriter _writer = null;
+    private DataSetWriter _writer = null;
     private GeneratorSettings _settings = null;
     
     public Generator(GeneratorSettings settings) {
         Validate.notNull(settings);
         _settings = settings;
-        _writer = new ARFFWriter(settings);
+        
+        if (_settings.getWriter().equals("CSV")){
+            _writer = new CSVWriter(settings);
+        } else {
+            _writer = new ARFFWriter(settings);
+        }
     }
     
     public void generate() throws IOException {

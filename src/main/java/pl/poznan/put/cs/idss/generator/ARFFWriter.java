@@ -8,19 +8,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.Validate;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
-public class ARFFWriter {
-
-    private GeneratorSettings _settings = null;
+public class ARFFWriter extends DataSetWriter {
     
     public ARFFWriter(GeneratorSettings settings) {
-        Validate.notNull(settings);
-        _settings = settings;
+        super(settings);
     }
     
+    @Override
     public void writeToFile(String fileName,
             List<Example> examples) throws IOException {
         try (FileWriter writer = new FileWriter(fileName)) {
@@ -28,8 +25,8 @@ public class ARFFWriter {
 //            if (!description.isEmpty())
 //                writer.write(prepareDescription(description) + "\n");
             
-            log.info("Saving file {}...", fileName);
-            boolean anyLabeledClasses = !_settings.getLabeledClassIndexes().isEmpty();
+            log.info("Saving ARFF file {}...", fileName);
+            boolean anyLabeledClasses = !getSettings().getLabeledClassIndexes().isEmpty();
             // header (relation)
             writer.write("@relation GENERATED\n");
             writer.write(prepareAttributes() + "\n");
@@ -41,9 +38,9 @@ public class ARFFWriter {
             // body (data)
             writer.write("@data\n");
             for (Example example : examples) {
-                String className = _settings.getClassName(example.getClassIndex());
+                String className = getSettings().getClassName(example.getClassIndex());
                 String exampleString;
-                if (!anyLabeledClasses || _settings.getLabeledClassIndexes().indexOf(example.getClassIndex()) == -1)
+                if (!anyLabeledClasses || getSettings().getLabeledClassIndexes().indexOf(example.getClassIndex()) == -1)
                     exampleString = example.toString(className);
                 else 
                     exampleString = example.toString(String.format("%s-%s", className, example.getLabel().toString()));
@@ -55,18 +52,18 @@ public class ARFFWriter {
     
 
     private String prepareClasses() {
-        StringBuilder sb = new StringBuilder(String.format("@attribute %s {", _settings.getDecisionName()));
-        sb.append(StringUtils.join(_settings.getClassNames(), ", ")).append("}");
+        StringBuilder sb = new StringBuilder(String.format("@attribute %s {", getSettings().getDecisionName()));
+        sb.append(StringUtils.join(getSettings().getClassNames(), ",")).append("}");
         return sb.toString();
     }
 
         
     private String prepareAttributes() {
         StringBuilder sb = new StringBuilder();
-        for (int a = 0; a < _settings.getNumAttributes(); a++) {
+        for (int a = 0; a < getSettings().getNumAttributes(); a++) {
             if (a > 0)
                 sb.append("\n");
-            sb.append(String.format("@attribute %s numeric", _settings.getAttributeName(a)));
+            sb.append(String.format("@attribute %s numeric", getSettings().getAttributeName(a)));
         }
         return sb.toString();
     }
@@ -81,9 +78,9 @@ public class ARFFWriter {
 
     private String prepareLabels() {
         List<String> allLabels = new ArrayList<>();
-        for (int c = 0; c < _settings.getNumClasses(); c++) {
-            String className = _settings.getClassName(c);
-            if (_settings.getLabeledClassIndexes().indexOf(c) == -1)
+        for (int c = 0; c < getSettings().getNumClasses(); c++) {
+            String className = getSettings().getClassName(c);
+            if (getSettings().getLabeledClassIndexes().indexOf(c) == -1)
                 allLabels.add(className);
             else {
                 for (Example.Label l : Example.Label.values())
@@ -91,7 +88,7 @@ public class ARFFWriter {
             }
         }
         StringBuilder sb = new StringBuilder("@attribute LABEL {");
-        sb.append(StringUtils.join(allLabels, ", ")).append(("}\n"));
+        sb.append(StringUtils.join(allLabels, ",")).append(("}\n"));
         return sb.toString();            
     }        
 }

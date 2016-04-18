@@ -63,6 +63,7 @@ public class GeneratorSettings {
     private final static String KEY_LEARN_TEST_RATIO = "learnTestRatio";
     private final static String KEY_LEARN_TEST_PAIRS = "learnTestPairs";
     private final static String KEY_EXAMPLE_TYPE_LABELS = "exampleTypeLabels";
+    private final static String KEY_WRITER = "writer";
     private final static String VALUE_ALL = "*";
 
     private static final String NAME_DECISION = "D";
@@ -95,6 +96,8 @@ public class GeneratorSettings {
     private final Ratio[] _classDistributions = new Ratio[Ratio.SIZE_LEARN_TEST];
     
     private List<Integer> _labeledClassIndexes = null;
+    
+    private String _writer;
     
     public int getNumClasses() {
         return _classes.size();
@@ -206,7 +209,14 @@ public class GeneratorSettings {
                 _labeledClassIndexes.set(i, _labeledClassIndexes.get(i) - 1);
         }
         
-        
+        // Read information about the output format
+        _writer = extractString(config, KEY_WRITER, false, (n) -> n == null || n.equalsIgnoreCase("CSV") || n.equalsIgnoreCase("ARFF"));
+        if (_writer == null){
+            _writer = "ARFF";
+        } else {
+            _writer = _writer.toUpperCase();
+        }
+                
         log.debug(toString());
         
         validate();

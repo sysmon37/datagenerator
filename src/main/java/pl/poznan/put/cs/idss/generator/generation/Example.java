@@ -42,7 +42,7 @@ public class Example {
     public String toString(boolean addLabel) {
         StringBuilder sb = new StringBuilder(toString());
         if (addLabel) {
-            sb.append(", ").append(getLabel().toString());
+            sb.append(",").append(getLabel().toString());
         }
 
         return sb.toString();
@@ -53,7 +53,7 @@ public class Example {
     }
     
     public String toString(String classOrLabelName) {
-        return _point.toString() + ", " + classOrLabelName;
+        return _point.toString() + "," + classOrLabelName;
     }
     
         
