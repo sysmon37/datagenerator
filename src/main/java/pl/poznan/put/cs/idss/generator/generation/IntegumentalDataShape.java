@@ -2,6 +2,7 @@ package pl.poznan.put.cs.idss.generator.generation;
 
 import pl.poznan.put.cs.idss.generator.settings.Region;
 import java.util.List;
+import pl.poznan.put.cs.idss.generator.settings.Size;
 
 public class IntegumentalDataShape extends DataShape {
 
@@ -22,10 +23,10 @@ public class IntegumentalDataShape extends DataShape {
     }
 
     @Override
-    public Point generateCorePoint() {
+    public Point generateSafePoint() {
         Point point = null;
         do {
-            point = _underlyingDataShape.generateCorePoint();
+            point = _underlyingDataShape.generateSafePoint();
         } //		while(isCoveredByAnyRegion(point));
         while (isInCoreZoneOfAnyRegion(point));
         return point;
@@ -43,7 +44,7 @@ public class IntegumentalDataShape extends DataShape {
 
     private boolean isInCoreZoneOfAnyRegion(Point point) {
         for (RegionGenerator r : _otherGenerators) {
-            if (r.isInCoreZone(point)) {
+            if (r.isInSafeRange(point)) {
                 return true;
             }
         }
@@ -51,15 +52,15 @@ public class IntegumentalDataShape extends DataShape {
     }
 
     @Override
-    public Point generateOverlappingPoint() {
-        Point point = _otherGenerators.get(_dataShapeIndex).generateOverlappingPoint();
+    public Point generateBorderPoint() {
+        Point point = _otherGenerators.get(_dataShapeIndex).generateBorderPoint();
         _dataShapeIndex = (_dataShapeIndex + 1) % _otherGenerators.size();
         return point;
     }
 
 
     @Override
-    protected boolean isCovered(Point point, double margin) {
+    protected boolean isCovered(Point point, Size margin) {
         return false;
     }
 }

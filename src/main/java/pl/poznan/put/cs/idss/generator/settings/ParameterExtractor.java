@@ -52,7 +52,7 @@ public class ParameterExtractor {
     public List<RegionDescription> getRegionDescriptions() {      
         List<RegionDescription> descriptions = new ArrayList<>();
         for (int c = 0; c < _settings.getNumClasses(); c++) {
-            Class clazz = _settings.getClass(c);
+            DecisionClass clazz = _settings.getDecisionClass(c);
             for (int r = 0; r < clazz.getNumRegions(); r++)
                 descriptions.add(new RegionDescription(clazz.getRegion(r), c));
         }
@@ -70,7 +70,7 @@ public class ParameterExtractor {
         List<OutlierDescription> outlierDescriptions = new ArrayList<>();
 
         for (int c = 0; c < _settings.getNumClasses(); c++) {
-            Class clazz = _settings.getClass(c);
+            DecisionClass clazz = _settings.getDecisionClass(c);
             Ratio learnExampleTypeDistribution = clazz.getExampleTypeDistribution(Ratio.LEARN);
             Ratio testExampleTypeDistribution = clazz.getExampleTypeDistribution(Ratio.TEST);
             for (int t : Arrays.asList(Ratio.OUTLIER, Ratio.RARE)) {

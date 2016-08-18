@@ -2,6 +2,8 @@ package pl.poznan.put.cs.idss.generator.generation;
 
 import pl.poznan.put.cs.idss.generator.settings.Region;
 import lombok.Getter;
+import pl.poznan.put.cs.idss.generator.settings.RangeType;
+import pl.poznan.put.cs.idss.generator.settings.Size;
 
 public abstract class DataShape {
     
@@ -12,19 +14,24 @@ public abstract class DataShape {
         _region = region;
     }
     
-    public abstract Point generateCorePoint();
+    public abstract Point generateSafePoint();
 
-    public abstract Point generateOverlappingPoint();
+    public abstract Point generateBorderPoint();
 
 
-    protected abstract boolean isCovered(Point point, double margin);
+    protected abstract boolean isCovered(Point point, Size radius);
+    
+    protected boolean isCovered(Point point, RangeType range) {
+        return isCovered(point, _region.getRadius(range));
+    }
+    
         
-    public boolean isInNoOutlierZone(Point point) {
-        return isCovered(point, _region.getBorderZone() + _region.getNoOutlierZone());
+    public boolean isInNoOutlierRange(Point point) {
+        return isCovered(point, RangeType.NO_OUTLIER);
     }
 
-    public boolean isInCoreZone(Point point) {
-        return isCovered(point, 0);
+    public boolean isInSafeRange(Point point) {
+        return isCovered(point, RangeType.SAFE);
     }
 
     /**
@@ -34,7 +41,7 @@ public abstract class DataShape {
      * @return 
      */
     public boolean isCovered(Point point) {
-        return isCovered(point, _region.getBorderZone());
+        return isCovered(point, RangeType.BORDER);
     }
 
 }

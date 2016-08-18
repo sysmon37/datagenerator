@@ -1,7 +1,7 @@
 package pl.poznan.put.cs.idss.generator.settings;
 
 import pl.poznan.put.cs.idss.generator.settings.GeneratorSettings;
-import pl.poznan.put.cs.idss.generator.settings.Class;
+import pl.poznan.put.cs.idss.generator.settings.DecisionClass;
 import pl.poznan.put.cs.idss.generator.settings.Ratio;
 import java.util.Properties;
 import org.apache.commons.configuration.CompositeConfiguration;
@@ -12,6 +12,20 @@ import static org.hamcrest.Matchers.is;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 
 /**
  *
@@ -65,8 +79,8 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(126.0, 875.0)));
         // Check example types in classes
@@ -85,8 +99,8 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(126.0, 876.0)));
         // Check example types in classes
@@ -109,8 +123,8 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         
         // Train-test ratio
         assertThat(_settings.getLearnTestRatio(), is(new Ratio(875.0, 125.0)));
@@ -145,8 +159,8 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         
         // Train-test ratio
         assertThat(_settings.getLearnTestRatio(), is(new Ratio(875.0, 125.0)));
@@ -181,8 +195,8 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         
         // Train-test ratio
         assertThat(_settings.getLearnTestRatio(), is(new Ratio(710.0, 290.0)));
@@ -216,8 +230,8 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         
         // Train-test ratio
         assertThat(_settings.getLearnTestRatio(), is(new Ratio(500.0, 500.0)));

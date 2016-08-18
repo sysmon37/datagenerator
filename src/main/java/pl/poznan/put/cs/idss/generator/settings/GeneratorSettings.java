@@ -64,6 +64,8 @@ public class GeneratorSettings {
     private final static String KEY_LEARN_TEST_PAIRS = "learnTestPairs";
     private final static String KEY_EXAMPLE_TYPE_LABELS = "exampleTypeLabels";
     private final static String KEY_WRITER = "writer";
+
+    private final static String KEY_BORDER = "border";
     private final static String VALUE_ALL = "*";
 
     private static final String NAME_DECISION = "D";
@@ -74,7 +76,7 @@ public class GeneratorSettings {
     public final static int NUM_RARE_PER_GROUP = 2;
     
     
-    private List<Class> _classes = null;
+    private List<DecisionClass> _decisionClasses = null;
     private Ratio _classRatio = null;
 
     private double _minOutlierDistance = 0;
@@ -100,7 +102,7 @@ public class GeneratorSettings {
     private String _writer;
     
     public int getNumClasses() {
-        return _classes.size();
+        return _decisionClasses.size();
     }
 
     public void read(String fileName, Properties cmdLineProperties) throws ConfigurationException {
@@ -117,6 +119,18 @@ public class GeneratorSettings {
     }
     
     public void read(Configuration config) throws ConfigurationException {
+        try { 
+            doRead(config);
+        }
+        catch (IllegalStateException x) {
+            throw new ConfigurationException(x);
+        }
+        catch (IllegalArgumentException x) {
+            throw new ConfigurationException(x);
+        }
+    }
+    
+    protected void doRead(Configuration config) throws ConfigurationException {
         
         // Read information about attributes (currently limited to their number)
         _numAttributes = extractInteger(config, KEY_ATTRIBUTES, true, (n) -> n > 0 && n <= 40);
@@ -162,7 +176,7 @@ public class GeneratorSettings {
                 regions.add(region);
                 regionRatioData.add(region.getWeight());
             }
-            _classes.get(c).setRegions(regions).setRegionRatio(new Ratio(regionRatioData));
+            _decisionClasses.get(c).setRegions(regions).setRegionRatio(new Ratio(regionRatioData));
         }
         
         // Examples
@@ -219,7 +233,11 @@ public class GeneratorSettings {
                 
         log.debug(toString());
         
+        // Validate current configuration
         validate();
+        
+        // Update radiuses for regions from all decision classes
+        _decisionClasses.stream().forEach((c) -> c.updateRegionsRadiuses());
         // 
         // Distribute examples into train and test sets, classes, types and regions
         distributeExamples();
@@ -235,15 +253,15 @@ public class GeneratorSettings {
         if (defaultExampleTypeRatio == null)
             defaultExampleTypeRatio = new Ratio(Arrays.asList(100.0, 0.0, 0.0, 0.0));
         
-        _classes = new ArrayList<>();
+        _decisionClasses = new ArrayList<>();
         for (int c = 0; c < numClasses; c++) {
-            Class clazz = new Class(); 
+            DecisionClass clazz = new DecisionClass(); 
             key = String.format("%s.%d.%s", KEY_CLASS, c + 1, KEY_EXAMPLE_TYPE_RATIO);            
             Ratio exampleTypeRatio = extractRatio(config, key, false, Ratio.SIZE_EXAMPLE_TYPE);
             if (exampleTypeRatio == null)
                 exampleTypeRatio = defaultExampleTypeRatio;
             clazz.setExampleTypeRatio(exampleTypeRatio);
-            _classes.add(clazz);            
+            _decisionClasses.add(clazz);            
         }
     }
 
@@ -283,12 +301,21 @@ public class GeneratorSettings {
             region.setRadius(radius);
         }
         
+        key = String.format("%s.%s", baseKey, KEY_BORDER);
+        String borderString = extractString(config, key, false, (s) -> BorderType.isValid(s));
+        BorderType border = BorderType.validate(borderString);
+        if (border != null)
+            region.setBorder(border);
+        else if (isDefault)
+            region.setBorder(BorderType.FIXED);
+        
         key = String.format("%s.%s", baseKey, KEY_BORDER_ZONE);
-        Double borderZone = extractDouble(config, key, 
-                !isDefault && region.getBorderZone() == null, (d) -> d >= 0);
-        if (borderZone != null) 
+        Double borderZone = extractDouble(config, key, !isDefault && region.getBorder() == BorderType.FIXED && region.getBorderZone() == null, (d) -> d >= 0);
+        if (borderZone != null)
             region.setBorderZone(borderZone);
-                        
+        else if (isDefault)
+            region.setBorderZone(0.0);
+
         key = String.format("%s.%s", baseKey, KEY_NO_OUTLIER_ZONE);
         Double noOutlierZone = extractDouble(config, key, 
                 !isDefault && region.getNoOutlierZone() == null, (d) -> d >= 0);
@@ -465,7 +492,7 @@ public class GeneratorSettings {
             do {
                 corrected = false;
                 for (int c = 0; c < getNumClasses(); c++) {
-                    Class clazz = getClass(c);
+                    DecisionClass clazz = getDecisionClass(c);
                     int numExamples = (int) getClassDistribution(s).get(c);
                     Ratio exampleTypeDistribution = calculateDistribution(clazz.getExampleTypeRatio(), numExamples, true);
                     log.debug("    Distributing class {} into examples types: #{} ({}) ==> #{}", c + 1, numExamples, clazz.getExampleTypeRatio(), exampleTypeDistribution);       
@@ -494,7 +521,7 @@ public class GeneratorSettings {
             _learnTestDistribution.set(s, classDistribution.getTotal());
             
             for (int c = 0; c < getNumClasses(); c++) {
-                Class clazz = getClass(c);
+                DecisionClass clazz = getDecisionClass(c);
                 log.debug("    Distributing class {} into examples types: #{} ({}) ==> #{}", c + 1, clazz.getNumExamples(s),clazz.getExampleTypeRatio(), clazz.getExampleTypeDistribution(s));                    
                 distributeExamplesIntoRegions(s, c);
             }
@@ -503,7 +530,7 @@ public class GeneratorSettings {
     }
     
     private void distributeExamplesIntoRegions(int setIndex, int classIndex) {
-        Class clazz = getClass(classIndex);
+        DecisionClass clazz = getDecisionClass(classIndex);
         
         int[] numRemaining = new int[] {(int) clazz.getExampleTypeDistribution(setIndex).get(Ratio.SAFE), (int) clazz.getExampleTypeDistribution(setIndex).get(Ratio.BORDER)};        
         int numSafeBorder = numRemaining[Ratio.SAFE] + numRemaining[Ratio.BORDER];
@@ -593,8 +620,8 @@ public class GeneratorSettings {
 
     }
     
-    public Class getClass(int classIndex) {
-        return _classes.get(classIndex);
+    public DecisionClass getDecisionClass(int classIndex) {
+        return _decisionClasses.get(classIndex);
     }
     
     public Ratio getClassDistribution(int setIndex) {
@@ -620,7 +647,7 @@ public class GeneratorSettings {
      */
     private void validate() throws ConfigurationException {
         for (int c = 0; c < getNumClasses(); c++) {
-            Class clazz = getClass(c);
+            DecisionClass clazz = getDecisionClass(c);
             int numIntegumentalRegions = 0;
             Ratio exampleTypeRatio = clazz.getExampleTypeRatio();
             for (int r = 0; r < clazz.getNumRegions(); r++) {
@@ -632,8 +659,8 @@ public class GeneratorSettings {
                     if (region.getNumRotations() > 0)
                         throw new ConfigurationException(String.format("Class %d, region %d: no rotations are allowed for integumetnal regions", c + 1, r + 1));
                 } else {
-                    if (exampleTypeRatio.get(Ratio.BORDER) > 0 && region.getBorderZone() == 0)
-                        throw new ConfigurationException(String.format("Class %d, region %d: border zone is 0, generating borederline example is impossible", c + 1, r + 1));
+                    if (region.getBorder() == BorderType.FIXED && exampleTypeRatio.get(Ratio.BORDER) > 0 && region.getBorderZone() == 0.0)
+                        throw new ConfigurationException(String.format("Class %d, region %d: border zone has no area, generating borederline example is impossible", c + 1, r + 1));
                         
                 }
             }
@@ -665,7 +692,7 @@ public class GeneratorSettings {
         formatter.format("minOutlierDistance = %s\n", getMinOutlierDistance());
         formatter.format("classRatio = %s\n", getClassRatio());
         for (int c = 0; c < getNumClasses(); c++) {
-            Class clazz = getClass(c);
+            DecisionClass clazz = getDecisionClass(c);
             String classString = String.format("class.%d", c + 1);
             formatter.format("%s.exampleTypeRatio = %s\n", classString, clazz.getExampleTypeRatio());
             formatter.format("%s.regions = %d\n", classString, clazz.getNumRegions());

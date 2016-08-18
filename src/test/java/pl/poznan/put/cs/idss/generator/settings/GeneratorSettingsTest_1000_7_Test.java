@@ -6,11 +6,13 @@ import java.util.Properties;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.MapConfiguration;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 
 /**
  *
@@ -63,11 +65,11 @@ public class GeneratorSettingsTest_1000_7_Test {
         // Check classes and regions
         for (int c = 0; c < _settings.getNumClasses(); c++) {
             double total = 0;
-            for (int r = 0; r < _settings.getClass(c).getNumRegions(); r++)
-                total += _settings.getClass(c).getRegion(r).getNumExamples(Ratio.LEARN);
-            total += _settings.getClass(c).getNumExamples(Ratio.LEARN, Ratio.RARE);
-            total += _settings.getClass(c).getNumExamples(Ratio.LEARN, Ratio.OUTLIER);            
-            assertEquals(_settings.getClass(c).getNumExamples(Ratio.LEARN), total, 0.0);
+            for (int r = 0; r < _settings.getDecisionClass(c).getNumRegions(); r++)
+                total += _settings.getDecisionClass(c).getRegion(r).getNumExamples(Ratio.LEARN);
+            total += _settings.getDecisionClass(c).getNumExamples(Ratio.LEARN, Ratio.RARE);
+            total += _settings.getDecisionClass(c).getNumExamples(Ratio.LEARN, Ratio.OUTLIER);            
+            assertEquals(_settings.getDecisionClass(c).getNumExamples(Ratio.LEARN), total, 0.0);
         }
     }
 
@@ -79,8 +81,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -102,8 +104,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
 
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
@@ -126,8 +128,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -149,8 +151,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -172,8 +174,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
 
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
@@ -196,8 +198,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -219,8 +221,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -242,8 +244,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -265,8 +267,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -288,8 +290,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -311,8 +313,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -334,8 +336,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -357,8 +359,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -380,8 +382,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -403,8 +405,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -426,8 +428,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -449,8 +451,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes
@@ -472,8 +474,8 @@ public class GeneratorSettingsTest_1000_7_Test {
         config.addConfiguration(new MapConfiguration(_common));        
         _settings.read(config);
       
-        Class minorityClass = _settings.getClass(0);
-        Class majorityClass = _settings.getClass(1);
+        DecisionClass minorityClass = _settings.getDecisionClass(0);
+        DecisionClass majorityClass = _settings.getDecisionClass(1);
         // Check classes
         assertThat(_settings.getClassDistribution(Ratio.LEARN), is(new Ratio(125.0, 875.0)));
         // Check example types in classes

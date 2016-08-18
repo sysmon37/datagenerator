@@ -17,80 +17,87 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import pl.poznan.put.cs.idss.generator.settings.BorderType;
 import pl.poznan.put.cs.idss.generator.settings.Rotation;
 
 public class HyperCircularDataTest {
 
-    private RandomGenerator coreExamplesGenerator = mock(RandomGenerator.class);
-    private RandomGenerator overlappingExamplesGenerator = mock(RandomGenerator.class);
-    
+    private RandomGenerator safeExamplesGenerator = mock(RandomGenerator.class);
+    private RandomGenerator borderExamplesGenerator = mock(RandomGenerator.class);
+
     private List<Rotation> noRotations = new ArrayList<>();
 
     @Test(expected = IllegalArgumentException.class)
     public void whenNegativeBorderSize_throws() {
         new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(0.0)), new Size(Arrays.asList(1.0)), -1, 6, new Distribution(DistributionType.UNIFORM), null),
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(0.0)), new Size(Arrays.asList(1.0)), BorderType.FIXED, -1.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
     }
 
     @Test
     public void whenOneDimensionalDataAndCoreIsNormalized_returnsCorePoint() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(0.0)), new Size(Arrays.asList(1.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.39));
-        assertEquals(new Point(Arrays.asList(-0.39)), shape.generateCorePoint());
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(0.0)), new Size(Arrays.asList(1.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
+        shape.getRegion().updateRadiuses();
+        when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.39));
+        assertEquals(new Point(Arrays.asList(-0.39)), shape.generateSafePoint());
     }
 
     @Test
     public void whenOneDimensionalDataAndCoreIsShifted_returnsCorePoint() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(1.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.39));
-        assertEquals(new Point(Arrays.asList(-2.39)), shape.generateCorePoint());
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(1.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
+        shape.getRegion().updateRadiuses();
+        when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.39));
+        assertEquals(new Point(Arrays.asList(-2.39)), shape.generateSafePoint());
     }
 
     @Test
     public void whenOneDimensionalDataAndCoreIsShiftedAndStretched_returnsCorePoint() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.39));
-        assertEquals(new Point(Arrays.asList(-3.95)), shape.generateCorePoint());
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
+        shape.getRegion().updateRadiuses();
+        when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.39));
+        assertEquals(new Point(Arrays.asList(-3.95)), shape.generateSafePoint());
     }
 
     @Test
     public void whenCoreIsTwoDimensional_returnsCorePoint() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.4, -0.3));
-        assertEquals(new Point(Arrays.asList(-4., 22.0)), shape.generateCorePoint());
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
+        shape.getRegion().updateRadiuses();
+        when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.4, -0.3));
+        assertEquals(new Point(Arrays.asList(-4., 22.0)), shape.generateSafePoint());
     }
 
     @Test
     public void whenGeneratedCorePointIsNotInCore_returnsAnotherCorePoint() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
-        when(coreExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-1., 0.1),
-        													 Arrays.asList(-0.4, -0.3));
-        assertEquals(new Point(Arrays.asList(-4., 22.0)), shape.generateCorePoint());
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
+        shape.getRegion().updateRadiuses();
+        when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-1., 0.1),
+                Arrays.asList(-0.4, -0.3));
+        assertEquals(new Point(Arrays.asList(-4., 22.0)), shape.generateSafePoint());
     }
 
     @Test
     public void whenOneDimensionalData_isCoveredReturnsTrueIfPointIsInCore() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(0.5)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(0.5)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
+        shape.getRegion().updateRadiuses();
         assertTrue(shape.isCovered(new Point(Arrays.asList(-1.7))));
         assertFalse(shape.isCovered(new Point(Arrays.asList(0.3))));
         assertFalse(shape.isCovered(new Point(Arrays.asList(-3.0))));
@@ -99,9 +106,10 @@ public class HyperCircularDataTest {
     @Test
     public void whenTwoDimensionalData_isCoveredReturnsTrueIfPointIsInCore() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), 0, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
+        shape.getRegion().updateRadiuses();
         assertTrue(shape.isCovered(new Point(Arrays.asList(-2., 35.))));
         assertTrue(shape.isCovered(new Point(Arrays.asList(-7., 25.))));
         assertFalse(shape.isCovered(new Point(Arrays.asList(-7., 26.))));
@@ -112,9 +120,10 @@ public class HyperCircularDataTest {
     @Test
     public void whenBorderSizeIsNotEqualZero_isCoveredReturnsTrueIfPointIsInCoreOrOverlapping() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), 3, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
+        shape.getRegion().updateRadiuses();
         assertTrue(shape.isCovered(new Point(Arrays.asList(-2., 38.))));
         assertTrue(shape.isCovered(new Point(Arrays.asList(-10., 25.))));
         assertFalse(shape.isCovered(new Point(Arrays.asList(-10., 26.))));
@@ -125,60 +134,65 @@ public class HyperCircularDataTest {
     @Test
     public void whenOneDimensionalData_generateOverlappingPointReturnsAppropriatePoint() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), 3, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
 
-        when(overlappingExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.75));
-        assertEquals(new Point(Arrays.asList(4.)), shape.generateOverlappingPoint());
+        shape.getRegion().updateRadiuses();
+        when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.75));
+        assertEquals(new Point(Arrays.asList(4.)), shape.generateBorderPoint());
     }
 
     @Test
     public void whenOneDimensionalDataAndGeneratedCorePoint_generateOverlappingPointReturnsAnotherPoint() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), 3, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
 
-        when(overlappingExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.625),
-        															Arrays.asList(-0.875));
-        assertEquals(new Point(Arrays.asList(-9.)), shape.generateOverlappingPoint());
+        shape.getRegion().updateRadiuses();
+        when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.625),
+                Arrays.asList(-0.875));
+        assertEquals(new Point(Arrays.asList(-9.)), shape.generateBorderPoint());
     }
 
     @Test
     public void whenTwoDimensionalData_generateOverlappingPointReturnsAppropriatePoint() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), 3, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
 
-        when(overlappingExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.75, -8./13));
-        assertEquals(new Point(Arrays.asList(4., 17.)), shape.generateOverlappingPoint());
+        shape.getRegion().updateRadiuses();
+        when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.75, -8. / 13));
+        assertEquals(new Point(Arrays.asList(4., 17.)), shape.generateBorderPoint());
     }
 
     @Test
     public void whenTwoDimensionalDataAndGeneratedPointIsOutsideOverlapping_generateOverlappingPointReturnsAnotherPoint() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), 3, 6, new Distribution(DistributionType.UNIFORM), null),                
-                coreExamplesGenerator,
-                overlappingExamplesGenerator);
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
+                safeExamplesGenerator,
+                borderExamplesGenerator);
 
-        when(overlappingExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.75, -10./13.),
-        															Arrays.asList(0.75, -8./13.));
-        assertEquals(new Point(Arrays.asList(4., 17.)), shape.generateOverlappingPoint());
+        shape.getRegion().updateRadiuses();
+        when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.75, -10. / 13.),
+                Arrays.asList(0.75, -8. / 13.));
+        assertEquals(new Point(Arrays.asList(4., 17.)), shape.generateBorderPoint());
     }
 
     @Test
     public void whenIsInOutlierForbiddenZone_returnsCorrectValue() {
         DataShape shape = new HyperCircularDataShape(
-                new Region(1, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), 3, 6, new Distribution(DistributionType.UNIFORM), null),                
+                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
                 null,
                 null);
 
-        assertTrue(shape.isInNoOutlierZone(new Point(Arrays.asList(-2., 25.))));
-        assertTrue(shape.isInNoOutlierZone(new Point(Arrays.asList(-6., 34.))));
-        assertTrue(shape.isInNoOutlierZone(new Point(Arrays.asList(-8., 35.))));
-        assertFalse(shape.isInNoOutlierZone(new Point(Arrays.asList(-2., 45.))));
-        assertFalse(shape.isInNoOutlierZone(new Point(Arrays.asList(-12., 40.))));
+        shape.getRegion().updateRadiuses();
+        assertTrue(shape.isInNoOutlierRange(new Point(Arrays.asList(-2., 25.))));
+        assertTrue(shape.isInNoOutlierRange(new Point(Arrays.asList(-6., 34.))));
+        assertTrue(shape.isInNoOutlierRange(new Point(Arrays.asList(-8., 35.))));
+        assertFalse(shape.isInNoOutlierRange(new Point(Arrays.asList(-2., 45.))));
+        assertFalse(shape.isInNoOutlierRange(new Point(Arrays.asList(-12., 40.))));
     }
 }

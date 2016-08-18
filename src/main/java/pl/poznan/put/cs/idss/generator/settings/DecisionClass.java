@@ -5,11 +5,11 @@ import java.util.List;
 import lombok.Data;
 
 /**
- *
+ * Configuration for a certain decision class
  * @author swilk
  */
 @Data
-public class Class {
+public class DecisionClass {
     private List<Region> _regions = new ArrayList<>();
     private Ratio _exampleTypeRatio = null;
     private Ratio _regionRatio = null;
@@ -48,7 +48,7 @@ public class Class {
         return _regions.get(regionIndex);
     }
     
-    public Class setExampleTypeDistribution(int setIndex, Ratio distribution) {
+    public DecisionClass setExampleTypeDistribution(int setIndex, Ratio distribution) {
         _exampleTypeDistributions[setIndex] = new Ratio(distribution);
         return this;
     }
@@ -57,13 +57,23 @@ public class Class {
         return _exampleTypeDistributions[setIndex];
     }
 
-    public Class setRegionDistribution(int setIndex, Ratio distribution) {
+    public DecisionClass setRegionDistribution(int setIndex, Ratio distribution) {
         _regionDistributions[setIndex] = new Ratio(distribution);
         return this;
     }
     
     public Ratio getRegionDistribution(int setIndex) {
         return _regionDistributions[setIndex];
+    }
+    
+    public void updateRegionsRadiuses() {
+        _regions.stream().forEach((r) -> r.updateRadiuses());
+    }
+    
+    public DecisionClass setRegions(List<Region> regions) {
+        _regions = regions;
+        _regions.stream().forEach((r) -> r.setDecisionClass(this));
+        return this;
     }
     
 }

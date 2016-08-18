@@ -37,9 +37,9 @@ public class RegionTest {
     private List<Rotator> rotators = Arrays.asList(rotator);
 
     public RegionTest() {
-        when(shape.generateCorePoint()).thenReturn(corePoint);
+        when(shape.generateSafePoint()).thenReturn(corePoint);
         when(rotator.rotate(corePoint)).thenReturn(rotatedCorePoint);
-        when(shape.generateOverlappingPoint()).thenReturn(overlappingPoint);
+        when(shape.generateBorderPoint()).thenReturn(overlappingPoint);
         when(rotator.rotate(overlappingPoint)).thenReturn(rotatedOverlappingPoint);
     }
 
