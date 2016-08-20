@@ -1,6 +1,7 @@
 package pl.poznan.put.cs.idss.generator.settings;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Properties;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -25,6 +26,10 @@ public class GeneratorSettingsTest_AutoBorder_2D {
     private final Size region2_safeRadius = new Size(region2_radius);
     private final Size region2_borderRadius = new Size(Arrays.asList(4.0, 6.0));
     private final Size region2_noOutlierRadius = new Size(Arrays.asList(5.0, 7.0));
+
+    static final double RADIUS_X = 6.0;
+    static final double RADIUS_Y = 3.0;
+    static final double NO_OUTLIER_ZONE = 1.0;
     
     public GeneratorSettingsTest_AutoBorder_2D() {
     }
@@ -42,12 +47,12 @@ public class GeneratorSettingsTest_AutoBorder_2D {
         _common.setProperty("defaultRegion.radius", "2, 1");
         _common.setProperty("defaultRegion.border", "fixed");
         _common.setProperty("defaultRegion.borderZone", "2");
-        _common.setProperty("defaultRegion.noOutlierZone", "1");
+        _common.setProperty("defaultRegion.noOutlierZone", String.format(Locale.US, "%f", NO_OUTLIER_ZONE));
 
         _common.setProperty("defaultClass.exampleTypeRatio", "100:0:0:0");
         _common.setProperty("class.1.regions", "2");
         _common.setProperty("class.1.region.1.center", "6, 3");
-        _common.setProperty("class.1.region.1.radius", "6, 3");
+        _common.setProperty("class.1.region.1.radius", String.format(Locale.US, "%f, %f", RADIUS_X, RADIUS_Y));
         _common.setProperty("class.1.region.1.border", "auto");        
         _common.setProperty("class.1.region.2.center", "-8, -5");
         _common.setProperty("class.1.region.2.radius", "2, 4");
@@ -66,10 +71,13 @@ public class GeneratorSettingsTest_AutoBorder_2D {
 
     @Test
     public void ditributeExamples_100_0_0_0() throws ConfigurationException {
-        Size region1_radius = new Size(Arrays.asList(6.0, 3.0));
-        Size region1_safeRadius = new Size(region1_radius);
-        Size region1_borderRadius = new Size(region1_radius);
-        Size region1_noOutlierRadius = new Size(Arrays.asList(7.0, 4.0));
+        double safeBorderScaling = 1.0;
+        double safeScaling = 1.0;
+        
+        Size region1_radius = new Size(Arrays.asList(RADIUS_X, RADIUS_Y));
+        Size region1_safeRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling*safeScaling, RADIUS_Y*safeBorderScaling*safeScaling));
+        Size region1_borderRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling, RADIUS_Y*safeBorderScaling));
+        Size region1_noOutlierRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling + NO_OUTLIER_ZONE, RADIUS_Y*safeBorderScaling + NO_OUTLIER_ZONE));
 
         Properties changed = new Properties();
         changed.setProperty("class.1.exampleTypeRatio", "100:0:0:0");
@@ -94,10 +102,13 @@ public class GeneratorSettingsTest_AutoBorder_2D {
     
     @Test
     public void ditributeExamples_80_0_10_10() throws ConfigurationException {
-        Size region1_radius = new Size(Arrays.asList(6.0, 3.0));
-        Size region1_safeRadius = new Size(Arrays.asList(6.0, 3.0));
-        Size region1_borderRadius = new Size(region1_radius);
-        Size region1_noOutlierRadius = new Size(Arrays.asList(7.0, 4.0));
+        double safeBorderScaling = Math.pow(0.8, 1.0/2.0);
+        double safeScaling = 1.0;
+        
+        Size region1_radius = new Size(Arrays.asList(RADIUS_X, RADIUS_Y));
+        Size region1_safeRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling*safeScaling, RADIUS_Y*safeBorderScaling*safeScaling));
+        Size region1_borderRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling, RADIUS_Y*safeBorderScaling));
+        Size region1_noOutlierRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling + NO_OUTLIER_ZONE, RADIUS_Y*safeBorderScaling + NO_OUTLIER_ZONE));
 
         Properties changed = new Properties();
         changed.setProperty("class.1.exampleTypeRatio", "80:0:10:10");
@@ -122,12 +133,13 @@ public class GeneratorSettingsTest_AutoBorder_2D {
 
     @Test
     public void ditributeExamples_80_20_0_0() throws ConfigurationException {
-        double factor = Math.pow(0.8, 1.0/2.0);
+        double safeBorderScaling = Math.pow(1.0, 1.0/2.0);
+        double safeScaling = Math.pow(0.8, 1.0/2.0);
         
-        Size region1_radius = new Size(Arrays.asList(6.0, 3.0));
-        Size region1_safeRadius = new Size(Arrays.asList(factor*6.0, factor*3.0));
-        Size region1_borderRadius = new Size(region1_radius);
-        Size region1_noOutlierRadius = new Size(Arrays.asList(7.0, 4.0));
+        Size region1_radius = new Size(Arrays.asList(RADIUS_X, RADIUS_Y));
+        Size region1_safeRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling*safeScaling, RADIUS_Y*safeBorderScaling*safeScaling));
+        Size region1_borderRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling, RADIUS_Y*safeBorderScaling));
+        Size region1_noOutlierRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling + NO_OUTLIER_ZONE, RADIUS_Y*safeBorderScaling + NO_OUTLIER_ZONE));
 
         Properties changed = new Properties();
         changed.setProperty("class.1.exampleTypeRatio", "80:20:0:0");
@@ -152,12 +164,13 @@ public class GeneratorSettingsTest_AutoBorder_2D {
 
     @Test
     public void ditributeExamples_50_50_0_0() throws ConfigurationException {
-        double factor = Math.pow(0.5, 1.0/2.0);
+        double safeBorderScaling = Math.pow(1.0, 1.0/2.0);
+        double safeScaling = Math.pow(0.5, 1.0/2.0);
         
-        Size region1_radius = new Size(Arrays.asList(6.0, 3.0));
-        Size region1_safeRadius = new Size(Arrays.asList(factor*6.0, factor*3.0));
-        Size region1_borderRadius = new Size(region1_radius);
-        Size region1_noOutlierRadius = new Size(Arrays.asList(7.0, 4.0));
+        Size region1_radius = new Size(Arrays.asList(RADIUS_X, RADIUS_Y));
+        Size region1_safeRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling*safeScaling, RADIUS_Y*safeBorderScaling*safeScaling));
+        Size region1_borderRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling, RADIUS_Y*safeBorderScaling));
+        Size region1_noOutlierRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling + NO_OUTLIER_ZONE, RADIUS_Y*safeBorderScaling + NO_OUTLIER_ZONE));
 
         Properties changed = new Properties();
         changed.setProperty("class.1.exampleTypeRatio", "50:50:0:0");
@@ -182,12 +195,13 @@ public class GeneratorSettingsTest_AutoBorder_2D {
     
     @Test
     public void ditributeExamples_40_40_10_10() throws ConfigurationException {
-        double factor = Math.pow(0.5, 1.0/2.0);
+        double safeBorderScaling = Math.pow(0.8, 1.0/2.0);
+        double safeScaling = Math.pow(0.5, 1.0/2.0);
         
-        Size region1_radius = new Size(Arrays.asList(6.0, 3.0));
-        Size region1_safeRadius = new Size(Arrays.asList(factor*6.0, factor*3.0));
-        Size region1_borderRadius = new Size(region1_radius);
-        Size region1_noOutlierRadius = new Size(Arrays.asList(7.0, 4.0));
+        Size region1_radius = new Size(Arrays.asList(RADIUS_X, RADIUS_Y));
+        Size region1_safeRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling*safeScaling, RADIUS_Y*safeBorderScaling*safeScaling));
+        Size region1_borderRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling, RADIUS_Y*safeBorderScaling));
+        Size region1_noOutlierRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling + NO_OUTLIER_ZONE, RADIUS_Y*safeBorderScaling + NO_OUTLIER_ZONE));
 
         Properties changed = new Properties();
         changed.setProperty("class.1.exampleTypeRatio", "40:40:10:10");
@@ -212,12 +226,13 @@ public class GeneratorSettingsTest_AutoBorder_2D {
 
     @Test
     public void ditributeExamples_0_80_10_10() throws ConfigurationException {
-        double factor = Math.pow(0.0, 1.0/2.0);
+        double safeBorderScaling = Math.pow(0.8, 1.0/2.0);
+        double safeScaling = Math.pow(0.0, 1.0/2.0);
         
-        Size region1_radius = new Size(Arrays.asList(6.0, 3.0));
-        Size region1_safeRadius = new Size(Arrays.asList(factor*6.0, factor*3.0));
-        Size region1_borderRadius = new Size(region1_radius);
-        Size region1_noOutlierRadius = new Size(Arrays.asList(7.0, 4.0));
+        Size region1_radius = new Size(Arrays.asList(RADIUS_X, RADIUS_Y));
+        Size region1_safeRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling*safeScaling, RADIUS_Y*safeBorderScaling*safeScaling));
+        Size region1_borderRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling, RADIUS_Y*safeBorderScaling));
+        Size region1_noOutlierRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling + NO_OUTLIER_ZONE, RADIUS_Y*safeBorderScaling + NO_OUTLIER_ZONE));
 
         Properties changed = new Properties();
         changed.setProperty("class.1.exampleTypeRatio", "0:80:10:10");
@@ -242,15 +257,16 @@ public class GeneratorSettingsTest_AutoBorder_2D {
 
     @Test
     public void ditributeExamples_0_0_50_50() throws ConfigurationException {
-        double factor = Math.pow(0.0, 1.0/2.0);
+        double safeBorderScaling = Math.pow(0.0, 1.0/2.0);
+        double safeScaling = Math.pow(0.0, 1.0/2.0);
         
-        Size region1_radius = new Size(Arrays.asList(6.0, 3.0));
-        Size region1_safeRadius = new Size(Arrays.asList(factor*6.0, factor*3.0));
-        Size region1_borderRadius = new Size(region1_radius);
-        Size region1_noOutlierRadius = new Size(Arrays.asList(7.0, 4.0));
+        Size region1_radius = new Size(Arrays.asList(RADIUS_X, RADIUS_Y));
+        Size region1_safeRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling*safeScaling, RADIUS_Y*safeBorderScaling*safeScaling));
+        Size region1_borderRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling, RADIUS_Y*safeBorderScaling));
+        Size region1_noOutlierRadius = new Size(Arrays.asList(RADIUS_X*safeBorderScaling + NO_OUTLIER_ZONE, RADIUS_Y*safeBorderScaling + NO_OUTLIER_ZONE));
 
         Properties changed = new Properties();
-        changed.setProperty("class.1.exampleTypeRatio", "0:80:10:10");
+        changed.setProperty("class.1.exampleTypeRatio", "0:0:50:50");
 
         CompositeConfiguration config = new CompositeConfiguration();
         config.addConfiguration(new MapConfiguration(changed));

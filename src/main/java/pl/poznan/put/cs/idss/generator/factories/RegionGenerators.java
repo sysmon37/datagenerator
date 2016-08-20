@@ -54,8 +54,8 @@ class RegionGenerators {
         _maxCoordinate = new Coordinate(_minCoordinate);
         for (RegionDescription descr : descriptions) {
             for (int i = 0; i < _maxCoordinate.getNumDimensions(); i++) {
-                double max = descr.getRegion().getCenter().get(i) + descr.getRegion().getRadius().get(i);
-                double min = descr.getRegion().getCenter().get(i) - descr.getRegion().getRadius().get(i);
+                double max = descr.getRegion().getCenter().get(i) + descr.getRegion().getBorderRadius().get(i);
+                double min = descr.getRegion().getCenter().get(i) - descr.getRegion().getBorderRadius().get(i);
                 _maxCoordinate.set(i, Math.max(_maxCoordinate.get(i), max));
                 _minCoordinate.set(i, Math.min(_minCoordinate.get(i), min));
             }

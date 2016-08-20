@@ -26,7 +26,7 @@ public class Region {
     /**
      * radius -- interpretation is dependent on the border type:
      * - FIXED => safeRadius
-     * - AUTO => borderRadius
+     * - AUTO =>  initial radius used for subsequent adjustments (may be different than safe, border and no outlier radiuses)
      */
     private Size _radius = null;
     @Getter
@@ -139,16 +139,28 @@ public class Region {
             _borderRadius = new Size(Arrays.asList(borderRadius));
             _safeRadius = new Size(_radius);
         } else {
-            double scalingFactor = 1.0;
+            double safeBorderScalingFactor = 1.0;
+            double safeScalingFactor = 0.0;
             if (_decisionClass != null) {
-                Ratio safeBorderFractions = _decisionClass.getExampleTypeRatio().subRatio(Ratio.SAFE, 2).toFractions();
-                scalingFactor = Math.pow(safeBorderFractions.get(Ratio.SAFE), 1.0/_radius.getNumDimensions());
+                Ratio exampleTypeRatio = _decisionClass.getExampleTypeRatio();
+                if (exampleTypeRatio.getTotal() > 0) {
+                    double safeBorder = exampleTypeRatio.get(Ratio.SAFE) + exampleTypeRatio.get(Ratio.BORDER);
+                    double safeBorderToOverall = safeBorder/exampleTypeRatio.getTotal();
+                    safeBorderScalingFactor = Math.pow(safeBorderToOverall, 1.0/_radius.getNumDimensions());
+                    if (safeBorder > 0.0) {
+                        double safeToBorder = exampleTypeRatio.get(Ratio.SAFE)/safeBorder; 
+                        safeScalingFactor = Math.pow(safeToBorder, 1.0/_radius.getNumDimensions());
+                    }                    
+                }                
             }
             Double safeRadius[] = new Double[_radius.getNumDimensions()];
-            for (int i = 0; i < _radius.size(); i++) 
-                safeRadius[i] = _radius.get(i) * scalingFactor;
+            Double borderRadius[] = new Double[_radius.getNumDimensions()];
+            for (int i = 0; i < _radius.size(); i++)  {
+                borderRadius[i] = _radius.get(i) * safeBorderScalingFactor;
+                 safeRadius[i] = borderRadius[i] * safeScalingFactor;
+            }
             _safeRadius = new Size(Arrays.asList(safeRadius));
-            _borderRadius = new Size(_radius);
+            _borderRadius = new Size(Arrays.asList(borderRadius));
         }
         Double noOutlierRadius[] = new Double[_radius.getNumDimensions()];
         for (int i = 0; i < _radius.size(); i++)
