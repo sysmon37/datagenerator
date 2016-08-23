@@ -6,6 +6,7 @@ import lombok.Data;
 
 import pl.poznan.put.cs.idss.generator.factories.AdditionalPointGeneratorFactory;
 import pl.poznan.put.cs.idss.generator.factories.OutlierDescription;
+import pl.poznan.put.cs.idss.generator.settings.Coordinate;
 import pl.poznan.put.cs.idss.generator.settings.Ratio;
 
 public class OutlierGenerator {
@@ -20,19 +21,26 @@ public class OutlierGenerator {
     private List<Example> copyOfExistingExamples;
     private List<Example> outliers = new ArrayList<>();
     private AdditionalPointGeneratorFactory additionalPointGeneratorFactory;
+    private Coordinate minCoordinate;
+    private Coordinate maxCoordinate;
 
     public OutlierGenerator(List<OutlierDescription> outlierDescriptions,
             OutlierFirstPointGenerator generator,
             IsInsideForbiddenZoneChecker forbiddenZoneChecker,
             OutlierDistanceBreachedChecker distanceChecker,
             OutlierNeighbourhoodChecker neighbourhoodChecker,
-            AdditionalPointGeneratorFactory additionalPointGeneratorFactory) {
+            AdditionalPointGeneratorFactory additionalPointGeneratorFactory,
+            Coordinate minCoordinate,
+            Coordinate maxCoordinate)
+    {
         this.outlierDescriptions = outlierDescriptions;
         this.generator = generator;
         this.forbiddenZoneChecker = forbiddenZoneChecker;
         this.distanceChecker = distanceChecker;
         this.neighbourhoodChecker = neighbourhoodChecker;
         this.additionalPointGeneratorFactory = additionalPointGeneratorFactory;
+        this.minCoordinate = minCoordinate;
+        this.maxCoordinate = maxCoordinate;
     }
 
     public List<Example> generateExamples(int setIndex, List<Example> existingExamples) {
@@ -91,7 +99,22 @@ public class OutlierGenerator {
                 && (!distanceChecker.isInterOutlierDistanceBreached(generatedExample, outliers, currentGroup))
                 && (!neighbourhoodChecker.hasNeighbourFromClassNotBelongingToOutlier(generatedExample,
                         copyOfExistingExamples,
-                        currentGroup));
+                        currentGroup))
+                && isExampleInsideBoundaries(generatedExample);
+    }
+
+    private boolean isExampleInsideBoundaries(Example example)
+    {
+        for (int i = 0; i < example.getPoint().getNumDimensions(); ++i)
+        {
+            double value = example.getPoint().get(i);
+            if (!(minCoordinate.get(i) <= value &&
+                  value <= maxCoordinate.get(i)))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public List<Example> generateTestExamples() {
