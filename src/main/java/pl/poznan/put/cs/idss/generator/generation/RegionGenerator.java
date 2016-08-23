@@ -19,12 +19,12 @@ public class RegionGenerator {
         _rotators = rotators;
     }
 
-    public Point generateOverlappingPoint() {
-        return rotatePoint(_dataShape.generateOverlappingPoint());
+    public Point generateBorderPoint() {
+        return rotatePoint(_dataShape.generateBorderPoint());
     }
 
-    public Point generateCorePoint() {
-        return rotatePoint(_dataShape.generateCorePoint());
+    public Point generateSafePoint() {
+        return rotatePoint(_dataShape.generateSafePoint());
     }
 
     public List<Example> generateLearnExamples() {
@@ -46,9 +46,9 @@ public class RegionGenerator {
         Region region = _dataShape.getRegion();
         
         // Generate borderline (overlapping) examples
-        examples.addAll(generateOverlappingExamples(region.getNumExamples(setIndex, Ratio.BORDER)));
+        examples.addAll(generateBorderExamples(region.getNumExamples(setIndex, Ratio.BORDER)));
         // Generate safe (core) examples
-        examples.addAll(generateCoreExamples(region.getNumExamples(setIndex, Ratio.SAFE)));
+        examples.addAll(generateSafeExamples(region.getNumExamples(setIndex, Ratio.SAFE)));
         return examples;
     }
 
@@ -56,12 +56,12 @@ public class RegionGenerator {
         return _dataShape.isCovered(unrotatePoint(point));
     }
 
-    public boolean isInNoOutlierZone(Point point) {
-        return _dataShape.isInNoOutlierZone(unrotatePoint(point));
+    public boolean isInNoOutlierRange(Point point) {
+        return _dataShape.isInNoOutlierRange(unrotatePoint(point));
     }
 
-    public boolean isInCoreZone(Point point) {
-        return _dataShape.isInCoreZone(unrotatePoint(point));
+    public boolean isInSafeRange(Point point) {
+        return _dataShape.isInSafeRange(unrotatePoint(point));
     }
 
     protected Point unrotatePoint(Point point) {
@@ -71,36 +71,36 @@ public class RegionGenerator {
         return point;
     }
 
-    private List<Example> generateCoreExamples(int numExamples) {
+    private List<Example> generateSafeExamples(int numExamples) {
         List<Example> examples = new ArrayList<>();
         while (examples.size() < numExamples) {
-            Point point = generateCorePoint();
+            Point point = generateSafePoint();
             examples.add(new Example(point, _classIndex, Example.Label.SAFE));
         }
         return examples;
     }
 
-    private List<Point> generateCorePoints(int numExamples) {
+    private List<Point> generateSafePionts(int numExamples) {
         List<Point> points = new ArrayList<>();
         while (points.size() < numExamples) {
-            points.add(generateCorePoint());
+            points.add(generateSafePoint());
         }
         return points;
     }
 
-    private List<Example> generateOverlappingExamples(int numExamples) {
+    private List<Example> generateBorderExamples(int numExamples) {
         List<Example> examples = new ArrayList<>();
         while (examples.size() < numExamples) {
-            Point point = generateOverlappingPoint();
+            Point point = generateBorderPoint();
             examples.add(new Example(point, _classIndex, Example.Label.BORDER));
         }
         return examples;
     }
 
-    private List<Point> generateOverlappingPoints(int numExamples) {
+    private List<Point> generateBorderPoints(int numExamples) {
         List<Point> points = new ArrayList<>();
         while (points.size() < numExamples) {
-            points.add(generateOverlappingPoint());
+            points.add(generateBorderPoint());
         }
         return points;
     }

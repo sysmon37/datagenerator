@@ -15,7 +15,7 @@ public class IsInsideForbiddenZoneChecker {
     public boolean isInsideForbiddenZone(Example example) {
         for (RegionGenerator r : regions.containsKey(example.getClassIndex()) ? regions.get(example.getClassIndex())
                 : new ArrayList<RegionGenerator>()) {
-            if (r.isInNoOutlierZone(example.getPoint())) {
+            if (r.isInNoOutlierRange(example.getPoint())) {
                 return true;
             }
         }
