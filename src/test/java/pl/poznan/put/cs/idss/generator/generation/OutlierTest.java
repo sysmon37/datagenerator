@@ -21,6 +21,7 @@ import pl.poznan.put.cs.idss.generator.generation.OutlierFirstPointGenerator;
 import pl.poznan.put.cs.idss.generator.generation.OutlierNeighbourhoodChecker;
 import pl.poznan.put.cs.idss.generator.generation.OutlierType;
 import pl.poznan.put.cs.idss.generator.generation.Point;
+import pl.poznan.put.cs.idss.generator.settings.Coordinate;
 
 public class OutlierTest
 {
@@ -37,6 +38,8 @@ public class OutlierTest
 	private OutlierNeighbourhoodChecker neighbourhoodChecker = mock(OutlierNeighbourhoodChecker.class);
 	private Example skippedExample = new Example(new Point(Arrays.asList(10.0)), classIndex);
 	private OutlierGenerator outlier;
+	private Coordinate minCoordinate = new Coordinate(Arrays.asList(-10.));
+	private Coordinate maxCoordinate = new Coordinate(Arrays.asList(150.));
 	
 	public OutlierTest()
 	{
@@ -57,7 +60,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		assertEquals(Arrays.asList(generateExample), outlier.generateLearnExamples(examples));
 	}
 	
@@ -70,7 +75,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		assertEquals(Arrays.asList(generateExample, secondExample), outlier.generateLearnExamples(examples));
 	}
 	
@@ -85,7 +92,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		assertEquals(Arrays.asList(generateExample, secondExample), outlier.generateLearnExamples(examples));		
 	}
 	
@@ -100,7 +109,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		assertEquals(Arrays.asList(generateExample, secondExample), outlier.generateLearnExamples(examples));		
 	}
 	
@@ -115,7 +126,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		assertEquals(Arrays.asList(generateExample, secondExample), outlier.generateLearnExamples(examples));		
 	}
 	
@@ -130,7 +143,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		assertEquals(Arrays.asList(generateExample, secondExample), outlier.generateLearnExamples(examples));		
 	}
 	
@@ -145,7 +160,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		assertEquals(Arrays.asList(generateExample, secondExample), outlier.generateLearnExamples(examples));		
 	}
 	
@@ -160,9 +177,30 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		assertEquals(Arrays.asList(generateExample, secondExample), outlier.generateLearnExamples(examples));		
-	}	
+	}
+
+	@Test
+	public void whenSecondRareCaseIsOutsideOtherRegions_returnsAnotherRareCase()
+	{
+		Example skippedExample = new Example(new Point(Arrays.asList(-50.0)), classIndex);
+		when(additionaPointGenerator.generate()).thenReturn(skippedExample.getPoint(),
+		                                                    secondExample.getPoint());
+		description = createRareCaseDescription();
+		outlier = new OutlierGenerator(Arrays.asList(description),
+		                               firstPointGenerator,
+		                               forbiddenZoneChecker,
+		                               distanceChecker,
+		                               neighbourhoodChecker,
+		                               additionalPointGeneratorFactory,
+		                               minCoordinate,
+		                               maxCoordinate);
+		assertEquals(Arrays.asList(generateExample, secondExample),
+					 outlier.generateLearnExamples(examples));
+	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void whenCannotGenerateValidPoint_throws()
@@ -175,7 +213,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		outlier.generateLearnExamples(examples);		
 	}
 	
@@ -188,7 +228,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		outlier.generateTestExamples();
 	}
 	
@@ -210,7 +252,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		when(firstPointGenerator.generate()).thenReturn(generateExample.getPoint(), skippedExample.getPoint(), secondExample.getPoint());
 		when(neighbourhoodChecker.hasNeighbourFromClassNotBelongingToOutlier(skippedExample, sum(examples, Arrays.asList(generateExample)), new ArrayList<Example>())).thenReturn(true);
 		assertEquals(Arrays.asList(generateExample, secondExample), outlier.generateLearnExamples(examples));
@@ -225,7 +269,9 @@ public class OutlierTest
 							  forbiddenZoneChecker,
 							  distanceChecker,
 							  neighbourhoodChecker,
-							  additionalPointGeneratorFactory);
+							  additionalPointGeneratorFactory,
+							  minCoordinate,
+							  maxCoordinate);
 		when(firstPointGenerator.generate()).thenReturn(generateExample.getPoint(), skippedExample.getPoint(), secondExample.getPoint());
 		when(distanceChecker.isInterOutlierDistanceBreached(skippedExample, Arrays.asList(generateExample), new ArrayList<Example>())).thenReturn(true);
 		assertEquals(Arrays.asList(generateExample, secondExample), outlier.generateLearnExamples(examples));

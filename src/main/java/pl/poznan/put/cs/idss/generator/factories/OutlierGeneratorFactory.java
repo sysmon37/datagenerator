@@ -22,6 +22,8 @@ class OutlierGeneratorFactory {
                 new IsInsideForbiddenZoneChecker(allRegionGenerators.getRegionGenerators()),
                 new OutlierDistanceBreachedChecker(interOutlierDistance),
                 new OutlierNeighbourhoodChecker(new NearestNeighbourSelector<>(new ExampleDistanceCalculator())),
-                new AdditionalPointGeneratorFactory());
+                new AdditionalPointGeneratorFactory(),
+                allRegionGenerators.getMinCoordinate(),
+                allRegionGenerators.getMaxCoordinate());
     }
 }
