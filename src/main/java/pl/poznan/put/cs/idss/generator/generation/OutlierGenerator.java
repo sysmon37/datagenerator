@@ -15,10 +15,10 @@ public class OutlierGenerator {
     private IsInsideForbiddenZoneChecker forbiddenZoneChecker;
     private OutlierDistanceBreachedChecker distanceChecker;
     private OutlierNeighbourhoodChecker neighbourhoodChecker;
-    private final static int GENERATION_OUTLIER_TRIALS_NUMBER = 10000;
+    private final static int GENERATION_OUTLIER_TRIALS_NUMBER = 100000;
     private List<PointGeneratorAndExamples> pointGeneratorsAndTheirExamples;
     private List<Example> copyOfExistingExamples;
-    private List<Example> outliers = new ArrayList<>();
+    private List<Example> outliers;
     private AdditionalPointGeneratorFactory additionalPointGeneratorFactory;
 
     public OutlierGenerator(List<OutlierDescription> outlierDescriptions,
@@ -45,6 +45,7 @@ public class OutlierGenerator {
     public List<Example> generateLearnExamples(List<Example> existingExamples) {
         copyOfExistingExamples = new ArrayList<>(existingExamples);
         pointGeneratorsAndTheirExamples = new ArrayList<>();
+        outliers = new ArrayList<>();
         for (OutlierDescription outlierDescription : outlierDescriptions) {
             Example.Label label = outlierDescription.type.toExampleLabel();
 
