@@ -23,7 +23,7 @@ public class GaussianDistributionGenerator extends RandomGenerator {
     @Override
     protected double getNumber(double mean, double range) {
         double value = getNumberGenerator().nextGaussian();
-        while (value < -getNumStandardDeviations() || value > getNumDimensions())
+        while (value < -getNumStandardDeviations() || value > getNumStandardDeviations())
             value = getNumberGenerator().nextGaussian();
         return value * range / getNumStandardDeviations() + mean;
     }
