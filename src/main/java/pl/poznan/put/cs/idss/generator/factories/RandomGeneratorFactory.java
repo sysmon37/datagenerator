@@ -11,7 +11,6 @@ public class RandomGeneratorFactory {
 
     
     public static RandomGenerator createCoreExamplesGenerator(Region region) {
-        int numDimensions = region.getCenter().getNumDimensions();
         switch (region.getDistribution().getType()) {
             case UNIFORM:
                 return createUniformGenerator(region);
@@ -26,7 +25,11 @@ public class RandomGeneratorFactory {
     }
 
     public static RandomGenerator createOutliersGenerator(int numDimensions) {
-        return new GaussianDistributionGenerator(numDimensions, 3.0);
+        /*  the number of standard deviations (2nd parameter below) changed 
+            from 3.0 to 1.0 to better "distribute" R and O examples
+        */
+        double numStDev = 1.0;
+        return new GaussianDistributionGenerator(numDimensions, numStDev);
     }
     
     protected static RandomGenerator createUniformGenerator(Region region) {
