@@ -311,9 +311,9 @@ public class GeneratorSettings {
         
         key = String.format("%s.%s", baseKey, KEY_BORDER_ZONE);
         Double borderZone = extractDouble(config, key, !isDefault && region.getBorder() == BorderType.FIXED && region.getBorderZone() == null, (d) -> d >= 0);
-        if (borderZone != null)
+        if (borderZone != null && region.getShape() != ShapeType.INTEGUMENTAL) 
             region.setBorderZone(borderZone);
-        else if (isDefault)
+        else if (isDefault || region.getShape() == ShapeType.INTEGUMENTAL)
             region.setBorderZone(0.0);
 
         key = String.format("%s.%s", baseKey, KEY_NO_OUTLIER_ZONE);
