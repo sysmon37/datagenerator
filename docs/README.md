@@ -1,5 +1,4 @@
-# Generator sztucznych danych
-## Opis
+# Opis
 Generator sztucznych wielowymiarowych i wieloklasowych danych niezrównoważonych niezrównoważonych został zrealizowany w ramach [projektu badawczego NCN 2013/11/B/ST6/00963](http://www.cs.put.poznan.pl/jstefanowski/projNCN.htm).  Został on stworzony z myślą o przygotowywaniu zbiorów do eksperymentów obliczeniowych pozwalających na analizę wpływu różnych czynników trudności związanych z danymi na działanie metod wstępnego przetwarzania oraz klasyfikatorów.
 
 Obecna wersja generatora oferuje następujące możliwości i funkcje:
@@ -14,13 +13,13 @@ Obecna wersja generatora oferuje następujące możliwości i funkcje:
 
 Generator został zaimplementowany w języku Java i pozwla na zapis danych w formacie ARFF wykorzystywanym w środowisku WEKA. Umożliwia również eksport danych do formatu CSV w celu ich łatwieszego przetwarzania przez inne narzędzia do analizy danych.
 
-## Publikacje
+# Publikacje
 
 1. Sz. Wojciechowski, Sz. Wilk: [Generator sztucznych danych wielowymiarowych - projekt i implementacja](./raport-rb-16-14.pdf). Raport Badawczy RB-16/14. Politechnika Poznańska, 2014.
 2. Sz. Wojciechowski, Sz. Wilk: [Generator sztucznych danych wielowymiarowych - weryfikacja eksperymentalna](./raport-rb-2-15.pdf). Raport Badawczy RB-2/15. Politechnika Poznańska, 2015.
 3. Sz. Wojciechowski, Sz. Wilk: [Difficulty factors and preprocessing in imbalanced data sets: an experimental study on artificial data](https://www.degruyter.com/downloadpdf/j/fcds.2017.42.issue-2/fcds-2017-0007/fcds-2017-0007.xml). Foundations of Computing and Decision Sciences 42 (2), 2017, 149-176.
 
-## Do pobrania
+# Do pobrania
 
 1. Najnowsza skompilowna wersja generatora (2017.08.10) wraz z niezbędnymi bibliotekami [[ZIP, 4.5 MB](./datagenerator-20170810.zip)]. Szczegółowy opis parametryzacji oraz uruchamiania generatora zawarty jest w raporcie RB-16/14.
 2. Źródła [[GitHub](https://github.com/sysmon37/datagenerator)]
