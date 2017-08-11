@@ -1,8 +1,41 @@
 <html>
   <head>
-    <title>Generator danych<title>
+    <meta charset="utf-8">
+    <title>Generator sztucznych danych</title>
   </head>
   <body>
-    <h1>Generator danych</h1>
+    <h1>Generator sztucznych danych</h1>
+    <h2>Opis</h2>
+    <p>
+      Generator sztucznych wielowymiarowych i wieloklasowych danych niezrównoważonych http://www.cs.put.poznan.pl/jstefanowski/projNCN.htmniezrównoważonych został zrealizowany w ramach <a hrf="">projektu badawczego NCN 2013/11/B/ST6/00963</a>.  Został on stworzony z myślą o przygotowywaniu zbiorów do eksperymentów obliczeniowych pozwalających na analizę wpływu różnych czynników trudności związanych z danymi na działanie metod wstępnego przetwarzania oraz klasyfikatorów.
+    </p>
+    <p>
+      Obecna wersja generatora oferuje następujące możliwości i funkcje:
+      <ul>
+        <li>generowanie zbiorów wielowymiarowych i wieloklasowych (z praktycznego punktu widzenia stosowane są 3-4 klasy oraz 3-10 atrybutów warunkowych odpowiadających poszczególnym wymiarom),</li>
+        <li>definiowanie klas składających się z jednego lub wielu obszarów (regionów) – meta-kul oraz meta-kostek z możliwością wskazania klas „wypełniających” dostępną przestrzeń między regionami (takie wypełnienia zazwyczaj związane z klasami większościowymi),</li>
+        <li>możliwość różnicowania względnego rozkładu obiektów między regionami oraz kontrolowania „gęstości” obiektów wewnątrz poszczególnych regionów (wybór jednego z dwóch możliwych rozkładów obiektów – jednostajnego i normalnego),</li>
+        <li>generowanie obiektów następujących typów:</li>
+        <ul>
+          <li><i>safe</i> – obiekty „bezpieczne” leżące wewnątrz poszczególnych regionów i posiadające jednorodne sąsiedztwo składające się głównie z obiektów tej samej klasy,</li>
+          <li><i>borderline</i> (lub <i>border</i>) – obiekty brzegowe leżące na obrzeżu poszczególnych regionów i przemieszane z obiektami z innych klas,</li>
+          <li>rare – obiekty tworzące małe „wyspy” (składające się z 2-3 obiektów) leżące daleko od regionów tworzących daną klasę, odpowiadające one rzadkim, ale poprawnym obserwacjom,</li>
+          <li>outlier</li> – pojedyncze obiekty leżące daleko od innych obiektów z tej samej klasy,odpowiadające obserwacjom „odstającym”,
+        </ul>
+        <li>generowanie par zbiorów uczący-testujący z zachowaniem położenia obiektów typu <i>rare</i> i <i>outlier</i> (w poszczególnych parach zbiorów powinny one występować w zbliżonych lokalizacjach)</li>
+      </ul>
+      Generator został zaimplementowany w języku Java i pozwla na zapis danych w formacie ARFF wykorzystywanym w środowisku WEKA. Umożliwia również eksport danych do formatu CSV w celu ich łatwieszego przetwarzania przez inne narzędzia do analizy danych.
+    </p>
+    <h2>Publikacje</h2>
+    <ol>
+      <li>Sz. Wojciechowski, Sz. Wilk: <a href="./raport-rb-16-14.pdf">Generator sztucznych danych wielowymiarowych - projekt i implementacja</a>. Raport Badawczy RB-16/14. Politechnika Poznańska, 2014.</li>
+      <li>Sz. Wojciechowski, Sz. Wilk: <a href="./raport-rb-2-15.pdf">Generator sztucznych danych wielowymiarowych - weryfikacja eksperymentalna</a>. Raport Badawczy RB-2/15. Politechnika Poznańska, 2015.</li>
+      <li>Sz. Wojciechowski, Sz. Wilk: <a href="https://www.degruyter.com/downloadpdf/j/fcds.2017.42.issue-2/fcds-2017-0007/fcds-2017-0007.xml">Difficulty factors and preprocessing in imbalanced data sets: an experimental study on artificial data</a>. Foundations of Computing and Decision Sciences 42 (2), 2017, 149-176.
+    </ol>
+    <h2>Do pobrania</h2>
+    <ol>
+      <li>Najnowsza skompilowna wersja generatora (2017.08.10) wraz z niezbędnymi bibliotekami [<a href="./datagenerator-20170810.zip">ZIP, 4.5 MB</a>]. Szczegółowy opis parametryzacji oraz uruchamiania generatora zawarty jest w raporcie RB-16/14.</li>
+      <li>Źródła [<a href="https://github.com/sysmon37/datagenerator">GitHub</a>]</li>
+    </ol>
   </body>
 </html>
