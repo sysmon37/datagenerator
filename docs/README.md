@@ -1,5 +1,5 @@
 # Opis
-Generator sztucznych wielowymiarowych i wieloklasowych danych niezrównoważonych niezrównoważonych został zrealizowany w ramach [projektu badawczego NCN 2013/11/B/ST6/00963](http://www.cs.put.poznan.pl/jstefanowski/projNCN.htm).  Został on stworzony z myślą o przygotowywaniu zbiorów do eksperymentów obliczeniowych pozwalających na analizę wpływu różnych czynników trudności związanych z danymi na działanie metod wstępnego przetwarzania oraz klasyfikatorów.
+Generator sztucznych wielowymiarowych i wieloklasowych danych niezrównoważonych został zrealizowany w ramach [projektu badawczego NCN 2013/11/B/ST6/00963](http://www.cs.put.poznan.pl/jstefanowski/projNCN.htm).  Został on stworzony z myślą o przygotowywaniu zbiorów do eksperymentów obliczeniowych pozwalających na analizę wpływu różnych czynników trudności związanych z danymi na działanie metod wstępnego przetwarzania oraz klasyfikatorów.
 
 Obecna wersja generatora oferuje następujące możliwości i funkcje:
  * generowanie zbiorów wielowymiarowych i wieloklasowych (z praktycznego punktu widzenia stosowane są 3-4 klasy oraz 3-10 atrybutów warunkowych odpowiadających poszczególnym wymiarom),
