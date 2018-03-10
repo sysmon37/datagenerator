@@ -11,7 +11,7 @@ import java.util.Collections;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 /**
  * This class acts now as a bridge between the new GeneratorSettings and 

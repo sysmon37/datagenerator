@@ -130,19 +130,19 @@ public class GeneratorSettingsTest_SettingsExtraction {
         
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ConfigurationException.class)
     public void whenInvalidClassIndexInExampleTypeLabelsClasses_thenException() throws ConfigurationException {
             _common.setProperty("exampleTypeLabels.classes", "3");
             _settings.read(_common);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ConfigurationException.class)
     public void whenInvalidLearnTestRatio_thenException() throws ConfigurationException {
             _common.setProperty("learnTestRatio", "0:1");
             _settings.read(_common);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ConfigurationException.class)
     public void whenInvalidCombinationOfLearnTestRatioAndLearnTestPairs_thenException() throws ConfigurationException {
             _common.setProperty("learnTestRatio", "1:0");
             _common.setProperty("learnTestPairs","5");

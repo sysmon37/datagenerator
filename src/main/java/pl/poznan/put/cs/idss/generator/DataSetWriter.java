@@ -7,7 +7,7 @@ import pl.poznan.put.cs.idss.generator.generation.Example;
 import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 @Getter
 @Slf4j

@@ -3,7 +3,7 @@ package pl.poznan.put.cs.idss.generator.settings;
 import java.util.Collections;
 import java.util.List;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Stores size (i.e. radius)

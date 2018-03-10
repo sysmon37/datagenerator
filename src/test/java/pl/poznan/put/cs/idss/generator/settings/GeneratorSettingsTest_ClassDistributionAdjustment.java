@@ -58,7 +58,7 @@ public class GeneratorSettingsTest_ClassDistributionAdjustment {
         _common.setProperty("class.1.region.2.rotation", "1, 2, -45");
         _common.setProperty("class.1.region.3.center", "0, -5");
         _common.setProperty("class.2.regions", "1");
-        _common.setProperty("class.2.region.1.shape", "I");
+        _common.setProperty("class.2.region.1.shape", "R");
         _common.setProperty("class.2.region.1.center", "0, 0");
         _common.setProperty("class.2.region.1.radius", "10, 10");
         _common.setProperty("fileName", "paw3-2d.arff");        

@@ -3,7 +3,7 @@ package pl.poznan.put.cs.idss.generator.generation;
 import pl.poznan.put.cs.idss.generator.settings.Coordinate;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 public class OutlierFirstPointGenerator implements PointGenerator {
 

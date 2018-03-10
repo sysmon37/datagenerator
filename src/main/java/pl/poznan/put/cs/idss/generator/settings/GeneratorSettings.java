@@ -19,7 +19,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.MapConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.IntegerValidator;
@@ -122,15 +122,12 @@ public class GeneratorSettings {
         try { 
             doRead(config);
         }
-        catch (IllegalStateException x) {
-            throw new ConfigurationException(x);
-        }
-        catch (IllegalArgumentException x) {
+        catch (IllegalStateException | IllegalArgumentException x) {
             throw new ConfigurationException(x);
         }
     }
-    
-    protected void doRead(Configuration config) throws ConfigurationException {
+
+    protected void doRead(Configuration config) throws ConfigurationException, IllegalArgumentException {
         
         // Read information about attributes (currently limited to their number)
         _numAttributes = extractInteger(config, KEY_ATTRIBUTES, true, (n) -> n > 0 && n <= 40);

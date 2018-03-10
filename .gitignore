@@ -1,5 +1,6 @@
 /bin/
-/nbproject/private/
 /build/
 /src/main/resources/*.arff
 /dist/
+/.gradle/
+/.idea/
