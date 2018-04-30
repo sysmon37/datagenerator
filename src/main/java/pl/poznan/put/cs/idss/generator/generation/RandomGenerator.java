@@ -42,9 +42,13 @@ public abstract class RandomGenerator {
     }
 
     public List<Double> getNumbers() {
+        return getNumbers(0.0, 1.0);
+    }
+
+    public List<Double> getNumbers(double mean, double range) {
         List<Double> coordinates = new ArrayList<>(_numDimensions);
         for (int i = 0; i < _numDimensions; ++i) {
-            coordinates.add(getNumber());
+            coordinates.add(getNumber(mean, range));
         }
         return coordinates;
     }

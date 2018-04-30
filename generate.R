@@ -1,5 +1,6 @@
 # generation of randomly distributed points from an ellipsoid
 
+
 generate <- function(axes, num_points=10) {
   num_dim <- length(axes)
   S <- diag(axes^2)
@@ -10,6 +11,23 @@ generate <- function(axes, num_points=10) {
   T <- chol(S)
   unif_ellipse <- unif_sphere %*% T
 }
+
+test_chol <- function(max_num_dim = 50) {
+  for (num_dim in 2:max_num_dim) {
+    axes <- runif(num_dim, min = 0.05)
+    
+    S1_diag <- diag(axes)
+    S2_diag <- diag(axes^2)
+    
+    T <- chol(S2_diag)
+    if (all(S1_diag == T))
+      msg <- sprintf("%d: cholesky returns axes", num_dim)
+    else
+      msg <- sprintf("%d: cholesky does not return axes!!!", num_dim)
+    print(msg)
+  }
+}
+
 
 draw_elipsis2d <- function(axes, res = 1000) {
   max <- max(axes)
@@ -27,6 +45,6 @@ test3d <- function(axes, num_points=1000) {
 library(plotly)
 
 test2d <- function(axes, num_points) {
-  draw_elipsis(axes)
+  draw_elipsis2d(axes)
   points(generate(axes, num_points), col="blue")
 }

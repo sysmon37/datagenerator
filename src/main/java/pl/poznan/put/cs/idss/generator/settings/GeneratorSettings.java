@@ -130,7 +130,9 @@ public class GeneratorSettings {
     protected void doRead(Configuration config) throws ConfigurationException, IllegalArgumentException {
         
         // Read information about attributes (currently limited to their number)
-        _numAttributes = extractInteger(config, KEY_ATTRIBUTES, true, (n) -> n > 0 && n <= 40);
+//        _numAttributes = extractInteger(config, KEY_ATTRIBUTES, true, (n) -> n > 0 && n <= 40);
+        // As we have discarded LDS, there is no upper limit for the number of features.
+        _numAttributes = extractInteger(config, KEY_ATTRIBUTES, true, (n) -> n > 0);
         
         // Read information about classes
         readClasses(config);
@@ -334,7 +336,7 @@ public class GeneratorSettings {
         if (!distData.isEmpty()) {
             Distribution distribution = new Distribution(DistributionType.validate((String) distData.get(0)));
             if (distData.size() > 1)
-                distribution.setNumStandardDeviations((Double) distData.get(1));
+                distribution.setNumStDevs((Double) distData.get(1));
             region.setDistribution(distribution);
         } else if (isDefault)
             region.setDistribution(new Distribution(DistributionType.UNIFORM));

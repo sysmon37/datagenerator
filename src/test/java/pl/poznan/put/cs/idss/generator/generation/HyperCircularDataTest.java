@@ -1,6 +1,8 @@
 package pl.poznan.put.cs.idss.generator.generation;
 
 import java.util.ArrayList;
+
+import org.apache.commons.math3.random.MersenneTwister;
 import pl.poznan.put.cs.idss.generator.settings.Coordinate;
 import pl.poznan.put.cs.idss.generator.settings.Distribution;
 import pl.poznan.put.cs.idss.generator.settings.DistributionType;
@@ -15,6 +17,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.Test;
 import pl.poznan.put.cs.idss.generator.settings.BorderType;
@@ -24,6 +27,7 @@ public class HyperCircularDataTest {
 
     private RandomGenerator safeExamplesGenerator = mock(RandomGenerator.class);
     private RandomGenerator borderExamplesGenerator = mock(RandomGenerator.class);
+    private AuxiliaryGenerator auxGenerator = mock(AuxiliaryGenerator.class);
 
     private List<Rotation> noRotations = new ArrayList<>();
 
@@ -40,9 +44,11 @@ public class HyperCircularDataTest {
         DataShape shape = new HyperCircularDataShape(
                 new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(0.0)), new Size(Arrays.asList(1.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
                 safeExamplesGenerator,
-                borderExamplesGenerator);
+                borderExamplesGenerator,
+                auxGenerator);
         shape.getRegion().updateRadiuses();
         when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.39));
+        when(auxGenerator.getUniformNumber()).thenReturn(0.39);
         assertEquals(new Point(Arrays.asList(-0.39)), shape.generateSafePoint());
     }
 
@@ -51,10 +57,12 @@ public class HyperCircularDataTest {
         DataShape shape = new HyperCircularDataShape(
                 new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(1.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
                 safeExamplesGenerator,
-                borderExamplesGenerator);
+                borderExamplesGenerator,
+                auxGenerator);
         shape.getRegion().updateRadiuses();
         when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.39));
-        assertEquals(new Point(Arrays.asList(-2.39)), shape.generateSafePoint());
+        when(auxGenerator.getUniformNumber()).thenReturn(0.25);
+        assertEquals(new Point(Arrays.asList(-2.25)), shape.generateSafePoint());
     }
 
     @Test
@@ -62,10 +70,12 @@ public class HyperCircularDataTest {
         DataShape shape = new HyperCircularDataShape(
                 new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
                 safeExamplesGenerator,
-                borderExamplesGenerator);
+                borderExamplesGenerator,
+                auxGenerator);
         shape.getRegion().updateRadiuses();
         when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.39));
-        assertEquals(new Point(Arrays.asList(-3.95)), shape.generateSafePoint());
+        when(auxGenerator.getUniformNumber()).thenReturn(0.25);
+        assertEquals(new Point(Arrays.asList(-3.25)), shape.generateSafePoint());
     }
 
     @Test
@@ -73,22 +83,12 @@ public class HyperCircularDataTest {
         DataShape shape = new HyperCircularDataShape(
                 new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
                 safeExamplesGenerator,
-                borderExamplesGenerator);
+                borderExamplesGenerator,
+                auxGenerator);
         shape.getRegion().updateRadiuses();
         when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.4, -0.3));
-        assertEquals(new Point(Arrays.asList(-4., 22.0)), shape.generateSafePoint());
-    }
-
-    @Test
-    public void whenGeneratedCorePointIsNotInCore_returnsAnotherCorePoint() {
-        DataShape shape = new HyperCircularDataShape(
-                new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 0.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
-                safeExamplesGenerator,
-                borderExamplesGenerator);
-        shape.getRegion().updateRadiuses();
-        when(safeExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-1., 0.1),
-                Arrays.asList(-0.4, -0.3));
-        assertEquals(new Point(Arrays.asList(-4., 22.0)), shape.generateSafePoint());
+        when(auxGenerator.getUniformNumber()).thenReturn(0.64);
+        assertEquals(new Point(Arrays.asList(-5.2, 20.2)), shape.generateSafePoint());
     }
 
     @Test
@@ -136,11 +136,13 @@ public class HyperCircularDataTest {
         DataShape shape = new HyperCircularDataShape(
                 new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
                 safeExamplesGenerator,
-                borderExamplesGenerator);
+                borderExamplesGenerator,
+                auxGenerator);
 
         shape.getRegion().updateRadiuses();
         when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.75));
-        assertEquals(new Point(Arrays.asList(4.)), shape.generateBorderPoint());
+        when(auxGenerator.getUniformNumber()).thenReturn(0.8);
+        assertEquals(new Point(Arrays.asList(4.4)), shape.generateBorderPoint());
     }
 
     @Test
@@ -148,12 +150,14 @@ public class HyperCircularDataTest {
         DataShape shape = new HyperCircularDataShape(
                 new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0)), new Size(Arrays.asList(5.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
                 safeExamplesGenerator,
-                borderExamplesGenerator);
+                borderExamplesGenerator,
+                auxGenerator);
 
         shape.getRegion().updateRadiuses();
         when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.625),
                 Arrays.asList(-0.875));
-        assertEquals(new Point(Arrays.asList(-9.)), shape.generateBorderPoint());
+        when(auxGenerator.getUniformNumber()).thenReturn(0.5, 0.75);
+        assertEquals(new Point(Arrays.asList(-8.)), shape.generateBorderPoint());
     }
 
     @Test
@@ -161,11 +165,13 @@ public class HyperCircularDataTest {
         DataShape shape = new HyperCircularDataShape(
                 new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
                 safeExamplesGenerator,
-                borderExamplesGenerator);
+                borderExamplesGenerator,
+                auxGenerator);
 
         shape.getRegion().updateRadiuses();
-        when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.75, -8. / 13));
-        assertEquals(new Point(Arrays.asList(4., 17.)), shape.generateBorderPoint());
+        when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(-0.4, 0.3));
+        when(auxGenerator.getUniformNumber()).thenReturn(1.0);
+        assertEquals(new Point(Arrays.asList(-8.4, 32.8)), shape.generateBorderPoint());
     }
 
     @Test
@@ -173,12 +179,14 @@ public class HyperCircularDataTest {
         DataShape shape = new HyperCircularDataShape(
                 new Region(1.0, ShapeType.CIRCLE, new Coordinate(Arrays.asList(-2.0, 25.0)), new Size(Arrays.asList(5.0, 10.0)), BorderType.FIXED, 3.0, 6.0, new Distribution(DistributionType.UNIFORM), null),
                 safeExamplesGenerator,
-                borderExamplesGenerator);
+                borderExamplesGenerator,
+                auxGenerator);
 
         shape.getRegion().updateRadiuses();
-        when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.75, -10. / 13.),
-                Arrays.asList(0.75, -8. / 13.));
-        assertEquals(new Point(Arrays.asList(4., 17.)), shape.generateBorderPoint());
+        when(borderExamplesGenerator.getNumbers()).thenReturn(Arrays.asList(0.4, 0.3),
+                Arrays.asList(0.3, -0.4));
+        when(auxGenerator.getUniformNumber()).thenReturn(0.16, 0.81);
+        assertEquals(new Point(Arrays.asList(2.32, 15.64)), shape.generateBorderPoint());
     }
 
     @Test
